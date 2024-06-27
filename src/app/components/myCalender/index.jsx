@@ -9,26 +9,25 @@ const localizer = momentLocalizer(moment);
 
 export default function MyCalendar(props) {
 
-    const [loader,setLoader] = useState(true);
-    useEffect(()=>{
+    const [loader, setLoader] = useState(true);
+    useEffect(() => {
         setLoader(true);
         setTimeout(() => {
             setLoader(false)
         }, 2000);
-    },[]);
-    const dummyEvents = [
-        {
-          allDay: false,
-          end: new Date('June 09, 2023 20:00:00'),
-          start: new Date('June 09, 2023 06:00:00'),
-          title: 'hi',
-        }
-    ]
-    
+        console.log(props.events)
+    }, []);
+    const dummyEvents = props.events.map((x) => ({
+        'title': x?.summary || "N/A",
+        'allDay': true,
+        'start': x?.start?.dateTime,
+        'end': x?.end?.dateTime
+    })) || [];
+
     return (
         <>
             <div className='h-[100vh]'>
-            {loader && <div className='w-full flex justify-center'> <HashLoaderComponent isLoading={loader} /> </div>}
+                {loader && <div className='w-full flex justify-center'> <HashLoaderComponent isLoading={loader} /> </div>}
                 {!loader && <Calendar
                     localizer={localizer}
                     events={dummyEvents}

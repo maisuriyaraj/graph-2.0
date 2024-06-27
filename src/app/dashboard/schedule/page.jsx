@@ -23,9 +23,9 @@ export default async function SchedulePage() {
   }
   return (
     <div className='w-full px-5'>
-        <MyCalendar />
+        <MyCalendar events={cradiantials?.calenderData} />
 
-        {cradiantials && !cradiantials?.data?.accountConnected && <GraphScheduleModal />}
+        {cradiantials && !cradiantials?.data?.accountConnected && <GraphScheduleModal  />}
     </div>
   )
 }

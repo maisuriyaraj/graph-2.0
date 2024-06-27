@@ -41,25 +41,25 @@ export default function SideNav({ userData }) {
       </div>
       <div className="flex flex-col border-b">
         <ul className='pl-5'>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard' ? 'activePath' : ''} mt-1`}>
             <Link href="/dashboard">Dashboard</Link>
           </li>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard/question' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/question' ? 'activePath' : ''} mt-1`}>
             <Link href="#">Questions</Link>
           </li>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard/feed' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/feed' ? 'activePath' : ''} mt-1`}>
             <Link href="#">For You</Link>
           </li>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard/articals' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/articals' ? 'activePath' : ''} mt-1`}>
             <Link href="#">Articles</Link>
           </li>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard/collections' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/collections' ? 'activePath' : ''} mt-1`}>
             <Link href="#" >Collections</Link>
           </li>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard/communities' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/communities' ? 'activePath' : ''} mt-1`}>
             <Link href="#">Communities</Link>
           </li>
-          <li className={`p-2 nav-link cursor-pointer hover:bg-gray-200 ${path == '/dashboard/graphAI' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/graphAI' ? 'activePath' : ''} mt-1`}>
             <Link href="/dashboard/graphAI">GraphAI</Link>
           </li>
         </ul>

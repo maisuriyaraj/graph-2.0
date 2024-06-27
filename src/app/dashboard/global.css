@@ -95,7 +95,7 @@ span {
 }
 
 #sideNav {
-  .nav-link {
+  .nav-link-1 {
     transition: 0.3s ease-in;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
