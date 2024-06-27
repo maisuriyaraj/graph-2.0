@@ -1,0 +1,12 @@
+#signIn {
+    .eye-icon {
+        position: absolute;
+        top: 30px;
+        right: 8px;
+    }
+
+    .err-Boxes {
+        border: 3px solid #ff1c1c;
+    }
+}
+
