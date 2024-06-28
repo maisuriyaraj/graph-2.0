@@ -70,14 +70,14 @@ export default function SideNav({ userData }) {
           <i className='bi bi-plus-circle'></i>
         </p>
         <ul className=''>
-          <li className='p-2 flex items-center nav-link cursor-pointer mt-1'>
+          <li className='p-2 flex items-center nav-link-1 cursor-pointer mt-1'>
             <div className='border image-section rounded-[50%] p-2'>
               <img src={"https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} className="rounded-[50%] object-cover" alt='avatar' width={40} />
               {/* <Image src={avatar} className="rounded-[50%] object-cover" alt='avatar' width={80} /> */}
             </div>
             <p className='mx-2'>Chris Evans</p>
           </li>
-          <li className='p-2 flex items-center nav-link cursor-pointer mt-1'>
+          <li className='p-2 flex items-center nav-link-1 cursor-pointer mt-1'>
             <div className='border image-section rounded-[50%] p-2'>
               <img src={"https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} className="rounded-[50%] object-cover" alt='avatar' width={40} />
               {/* <Image src={avatar} className="rounded-[50%] object-cover" alt='avatar' width={80} /> */}

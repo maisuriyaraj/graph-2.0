@@ -1,23 +1,70 @@
-import React from 'react'
+"use client";
+import React, { useEffect, useRef, useState } from 'react';
+import botImg from '../../../../public/bot-img.png'
+import robot from '../../../../public/robot.png'
+import Image from 'next/image';
+import { getRequest, postRequest } from '@/lib/api.service';
+import Cookies from 'js-cookie';
 
 export default function GraphAI() {
 
 
-  const chatsConversations = [
-    // {title:"Node js Authentication"},
-    // {title:"React js Hooks"},
-    // {title:"Angular js"},
-    // {title:"C# Operators"},
-    // {title:"Node js Cron Job operations asddasfsdfsdfs"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-    // {title:"Node js Authentication"},
-  ]
+  const [chatsConversations,setChatsRooms] = useState([]);
+  const [selectedChat,setSelectedChat] = useState(null);
+  const [userPrompt,setPrompt] = useState("");
+
+  const isInitialMount = useRef(true);
+
+
+  useEffect(()=>{
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      getUserChatList();
+    }
+  },[]);
+
+  function getUserChatList() {
+    const userId = JSON.parse(Cookies.get('userId'));
+    getRequest(`http://localhost:3000/api/chatBot?userId=${userId}`).then((response) => {
+      console.log(response)
+      let list2 = response?.data?.data;
+      let list = response?.data?.data.reverse();
+      setChatsRooms(list|| []);
+      if(selectedChat == null){
+        setSelectedChat(list2[0]);
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const addNewChat = () => {
+    const userId = JSON.parse(Cookies.get('userId'));
+    const BearerToken = JSON.parse(Cookies.get('AuthToken'));
+    postRequest(`http://localhost:3000/api/chatBot?userId=${userId}`).then((response) => {
+      console.log(response);
+      
+    }).then(()=>{
+      getUserChatList();
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const sendMessage = () => {
+    const payload = {
+      "prompt":userPrompt,
+      "ChatroomId":selectedChat._id
+    }
+    postRequest('http://localhost:3000/api/chatBot/v1',payload).then((response)=>{
+      console.log(response);
+    }).then(()=>{
+      getUserChatList();
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   return (
     // <div className='h-[100vh] w-full px-5 overflow-hidden' id='graphAi'>
     <div className="flex antialiased text-gray-800 overflow-x-hidden overflow-y-hidden">
@@ -44,7 +91,7 @@ export default function GraphAI() {
           </div>
           <div className="flex flex-col mt-8">
             <div className="flex flex-row items-center rounded-xl  cursor-pointer justify-between">
-              <button className="flex flex-row w-full items-center border  justify-between text-[16px] hover:bg-gray-100 rounded-xl p-4">
+              <button className="flex flex-row w-full items-center border  justify-between text-[16px] hover:bg-gray-100 rounded-xl p-4" onClick={() => addNewChat()}>
                 <div className="font-bold">New Conversation</div>
                 <div className="flex items-center justify-center text-black text-[16px] h-4 w-4">
                   <i className="bi bi-plus-circle"></i>
@@ -55,10 +102,9 @@ export default function GraphAI() {
               {
                 chatsConversations.map((x, i) => (
                   <>
-                  
-                  <button className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-4" key={i}>
-                    <div className="ml-2 text-sm font-semibold text-left w-40 overflow-hidden" style={{ textWrap: 'nowrap', textOverflow: 'ellipsis' }}>{x.title}</div>
-                  </button>
+                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 ${selectedChat._id == x._id ? 'bg-gray-100' : ''}`} key={x._id} onClick={() => setSelectedChat(x)}>
+                      <div className="ml-2 text-sm font-semibold text-left w-40 overflow-hidden" style={{ textWrap: 'nowrap', textOverflow: 'ellipsis' }}>{x?.chatTitle}</div>
+                    </button>
                   </>
                 ))
               }
@@ -67,14 +113,14 @@ export default function GraphAI() {
         </div>
 
         <div className="flex flex-col flex-auto h-[85vh] overflow-auto p-6">
-          <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+          {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
             <div className="flex flex-col h-full overflow-x-auto mb-4">
               <div className="flex flex-col h-full">
                 <div className="grid grid-cols-12 gap-y-2">
                   <div className="col-start-1 bot-chat col-end-8 p-3 rounded-lg">
                     <div className="flex flex-row items-center">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                        A
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white flex-shrink-0">
+                        <Image src={botImg} alt="B" />
                       </div>
                       <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
                         <div>Hey How are you today?</div>
@@ -83,10 +129,10 @@ export default function GraphAI() {
                   </div>
                   <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
                     <div className="flex items-center justify-start flex-row-reverse">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-500 flex-shrink-0">
                         A
                       </div>
-                      <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                      <div className="relative mr-3 text-sm bg-green-100 py-2 px-4 shadow rounded-xl">
                         <div>I'm ok what about you?</div>
                       </div>
                     </div>
@@ -118,7 +164,9 @@ export default function GraphAI() {
                 <div className="relative w-full">
                   <input
                     type="text"
-                    className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                    value={userPrompt}
+                    onChange={(e) => setPrompt(e.target.value) }
+                    className="flex w-full border rounded-xl focus:outline-none focus:border-green-300 pl-4 h-10"
                   />
                   <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                     <svg
@@ -139,7 +187,7 @@ export default function GraphAI() {
                 </div>
               </div>
               <div className="ml-4">
-                <button className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0">
+                <button className="flex items-center justify-center bg-green-500 hover:bg-green-600 rounded-xl text-white px-4 py-1 flex-shrink-0" onClick={()=>sendMessage()}>
                   <span>Send</span>
                   <span className="ml-2">
                     <svg
@@ -160,7 +208,14 @@ export default function GraphAI() {
                 </button>
               </div>
             </div>
-          </div>
+          </div>}
+          {selectedChat == null && <div className="flex flex-col flex-auto justify-center items-center flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+            <Image src={robot} alt='GraphAI' width={400} />
+            <div className='mt-10'>
+              <h2 className='text-4xl font-bold'>Introducing GraphAI</h2>
+              <button className='w-full bg-green-600 p-3 mt-5 text-white transition-all rounded-lg hover:bg-green-700 ' onClick={() => addNewChat()} >Start Conversation </button>
+            </div>
+          </div>}
         </div>
       </div>
     </div>

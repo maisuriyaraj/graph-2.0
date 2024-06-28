@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ref } from "yup";
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -18,7 +19,8 @@ const userSchema = new mongoose.Schema({
     languages: { type: [String], default: [] },
     bio: { type: String, default: null },
     isEmailVerified: { type: Boolean, default: false },
-    isMobileVerified: { type: Boolean, default: false }
+    isMobileVerified: { type: Boolean, default: false },
+    AIbotChats:{type:Array,default:[]}
 }, { timestamps: true });
 
 export const userModel = mongoose.models.users || mongoose.model('users', userSchema);
@@ -120,3 +122,18 @@ const calenderSchema = new mongoose.Schema({
 });
 
 export const calenderModel = mongoose.models.calender ||  mongoose.model('calender',calenderSchema);
+
+
+const chatSchema = new mongoose.Schema({
+    userMessage:{type:String},
+    AiReply:{type:String}
+});
+
+const AIBotSchema = new mongoose.Schema({
+    userId:{type:mongoose.Schema.Types.ObjectId,ref:'users'},
+    chatTitle:{type:String,default:""},
+    chats:[chatSchema]
+
+},{ timestamps: true });
+
+export const AIBotModel = mongoose.models.aichats || mongoose.model('aichats',AIBotSchema);
