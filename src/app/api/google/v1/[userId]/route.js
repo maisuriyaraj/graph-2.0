@@ -25,6 +25,29 @@ function getCalenderEvents(){
     })
 }
 
+function addCalenderEvents(event){
+    return new Promise((resolve,reject)=>{
+        let calendarId = 'primary';
+        const calendar = google.calendar({
+            version: 'v3',
+            auth: oauth2Client
+        });
+        calendar.events.insert({
+            auth:oauth2Client,
+            calendarId:'primary',
+            resource: event,
+        },(err,response)=>{
+            if(err){
+                console.log("<><><><><><><><><><><><><><><<><><><>",err);
+                reject(err)
+            }
+            let res = response;
+            console.log(response);
+            resolve(response);
+        })
+    })
+}
+
 export async function GET(request,content) {
     let userId = content.params.userId;
 
@@ -41,6 +64,52 @@ export async function GET(request,content) {
 
            const response = await getCalenderEvents();
             return NextResponse.json({status:true,message:"User Connected Successfully !",data:calenderCrediatials,calenderData:response},{status:201});
+        }else{
+            return NextResponse.json({status:false,message:"User is Not Connected !",accountConnected:false});
+        }
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({status:false,message:"Unable to Provide Service !"})
+    }
+}
+
+export async function POST(request,content){
+    let userId = content.params.userId;
+
+    try {
+        let calenderCrediatials = await calenderModel.findOne({userId:userId});
+        var event = {
+            'summary': 'HELLO EVENTS',
+            'location': 'Hyderabad,India',
+            'description': 'First event with nodeJS!',
+            'start': {
+              'dateTime': '2024-08-12T09:00:00-07:00',
+              'timeZone': 'Asia/Dhaka',
+            },
+            'end': {
+              'dateTime': '2024-08-14T17:00:00-07:00',
+              'timeZone': 'Asia/Dhaka',
+            },
+            'attendees': [],
+            'reminders': {
+              'useDefault': false,
+              'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},
+                {'method': 'popup', 'minutes': 10},
+              ],
+            },
+          };
+        if(calenderCrediatials){
+            oauth2Client.setCredentials({
+                access_token:calenderCrediatials.access_token,
+                refresh_token:calenderCrediatials.refresh_token
+                // scope:calenderCrediatials.scope,
+                // token_type:calenderCrediatials.token_type,
+                // expiry_date:calenderCrediatials.expiry_date
+            });
+
+           const response = await addCalenderEvents(event);
+            return NextResponse.json({status:true,message:"Event Addedd Successfully !",data:calenderCrediatials,calenderData:response},{status:201});
         }else{
             return NextResponse.json({status:false,message:"User is Not Connected !",accountConnected:false});
         }

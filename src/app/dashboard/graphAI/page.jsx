@@ -2,26 +2,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import botImg from '../../../../public/bot-img.png'
 import robot from '../../../../public/robot.png'
+import man from '../../../../public/man.png'
+
 import Image from 'next/image';
 import { getRequest, postRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
+import { HashLoaderComponent } from '@/app/components/loader';
 
 export default function GraphAI() {
 
 
-  const [chatsConversations,setChatsRooms] = useState([]);
-  const [selectedChat,setSelectedChat] = useState(null);
-  const [userPrompt,setPrompt] = useState("");
+  const [chatsConversations, setChatsRooms] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [userPrompt, setPrompt] = useState("");
+  const [loader,setLoader] = useState(true);
 
   const isInitialMount = useRef(true);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       getUserChatList();
+      setTimeout(() => {
+        setLoader(false);
+      }, 3000);
     }
-  },[]);
+  }, []);
 
   function getUserChatList() {
     const userId = JSON.parse(Cookies.get('userId'));
@@ -29,10 +36,10 @@ export default function GraphAI() {
       console.log(response)
       let list2 = response?.data?.data;
       let list = response?.data?.data.reverse();
-      setChatsRooms(list|| []);
-      if(selectedChat == null){
-        setSelectedChat(list2[0]);
-      }
+      setChatsRooms(list || []);
+      // if(selectedChat == null && ){
+      //   setSelectedChat(list2[0]);
+      // }
     }).catch((err) => {
       console.log(err)
     })
@@ -43,8 +50,8 @@ export default function GraphAI() {
     const BearerToken = JSON.parse(Cookies.get('AuthToken'));
     postRequest(`http://localhost:3000/api/chatBot?userId=${userId}`).then((response) => {
       console.log(response);
-      
-    }).then(()=>{
+
+    }).then(() => {
       getUserChatList();
     }).catch((err) => {
       console.log(err)
@@ -53,12 +60,11 @@ export default function GraphAI() {
 
   const sendMessage = () => {
     const payload = {
-      "prompt":userPrompt,
-      "ChatroomId":selectedChat._id
+      "prompt": userPrompt,
+      "ChatroomId": selectedChat._id
     }
-    postRequest('http://localhost:3000/api/chatBot/v1',payload).then((response)=>{
+    postRequest('http://localhost:3000/api/chatBot/v1', payload).then((response) => {
       console.log(response);
-    }).then(()=>{
       getUserChatList();
     }).catch(err => {
       console.log(err);
@@ -68,7 +74,7 @@ export default function GraphAI() {
   return (
     // <div className='h-[100vh] w-full px-5 overflow-hidden' id='graphAi'>
     <div className="flex antialiased text-gray-800 overflow-x-hidden overflow-y-hidden">
-      <div className="flex flex-row h-full w-full">
+      {!loader && <div className="flex flex-row h-full w-full">
         <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
           <div className="flex flex-row items-center justify-center h-12 w-full">
             <div className="flex items-center justify-center rounded-2xl text-green-700 bg-green-100 h-10 w-10">
@@ -102,7 +108,7 @@ export default function GraphAI() {
               {
                 chatsConversations.map((x, i) => (
                   <>
-                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 ${selectedChat._id == x._id ? 'bg-gray-100' : ''}`} key={x._id} onClick={() => setSelectedChat(x)}>
+                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 ${selectedChat?._id == x._id ? 'bg-gray-100' : ''}`} key={x._id} onClick={() => setSelectedChat(x)}>
                       <div className="ml-2 text-sm font-semibold text-left w-40 overflow-hidden" style={{ textWrap: 'nowrap', textOverflow: 'ellipsis' }}>{x?.chatTitle}</div>
                     </button>
                   </>
@@ -115,31 +121,33 @@ export default function GraphAI() {
         <div className="flex flex-col flex-auto h-[85vh] overflow-auto p-6">
           {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
             <div className="flex flex-col h-full overflow-x-auto mb-4">
-              <div className="flex flex-col h-full">
-                <div className="grid grid-cols-12 gap-y-2">
-                  <div className="col-start-1 bot-chat col-end-8 p-3 rounded-lg">
-                    <div className="flex flex-row items-center">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white flex-shrink-0">
-                        <Image src={botImg} alt="B" />
-                      </div>
-                      <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                        <div>Hey How are you today?</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
-                    <div className="flex items-center justify-start flex-row-reverse">
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-500 flex-shrink-0">
-                        A
-                      </div>
-                      <div className="relative mr-3 text-sm bg-green-100 py-2 px-4 shadow rounded-xl">
-                        <div>I'm ok what about you?</div>
+              {selectedChat.chats.map((chat) => (
+                <div className="flex flex-col h-full" key={chat._id}>
+                  <div className="grid grid-cols-12 gap-y-2">
+                    <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
+                      <div className="flex items-center justify-start flex-row-reverse">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-100 flex-shrink-0">
+                          <Image src={man} alt='U' />
+                        </div>
+                        <div className="relative mr-3 text-sm bg-green-100 py-2 px-4 shadow rounded-xl">
+                          <div>{chat.userMessage}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                    <div className="col-start-1 bot-chat col-end-8 p-3 rounded-lg">
+                      <div className="flex flex-row items-center">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white flex-shrink-0">
+                          <Image src={botImg} alt="B" />
+                        </div>
+                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                          <div>{chat.AiReply}</div>
+                        </div>
+                      </div>
+                    </div>
 
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
             <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
               <div>
@@ -165,7 +173,7 @@ export default function GraphAI() {
                   <input
                     type="text"
                     value={userPrompt}
-                    onChange={(e) => setPrompt(e.target.value) }
+                    onChange={(e) => setPrompt(e.target.value)}
                     className="flex w-full border rounded-xl focus:outline-none focus:border-green-300 pl-4 h-10"
                   />
                   <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
@@ -187,7 +195,7 @@ export default function GraphAI() {
                 </div>
               </div>
               <div className="ml-4">
-                <button className="flex items-center justify-center bg-green-500 hover:bg-green-600 rounded-xl text-white px-4 py-1 flex-shrink-0" onClick={()=>sendMessage()}>
+                <button className="flex items-center justify-center bg-green-500 hover:bg-green-600 rounded-xl text-white px-4 py-1 flex-shrink-0" onClick={() => sendMessage()}>
                   <span>Send</span>
                   <span className="ml-2">
                     <svg
@@ -217,7 +225,8 @@ export default function GraphAI() {
             </div>
           </div>}
         </div>
-      </div>
+      </div>}
+      {loader && <div className='w-full h-full flex flex-row justify-center overflow-hidden items-center'> <HashLoaderComponent isLoading={loader} /> </div>}
     </div>
 
     // </div>

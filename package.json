@@ -9,7 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@google/generative-ai": "^0.13.0",
+    "@mui/material": "^5.15.21",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/x-date-pickers": "^7.8.0",
     "aos": "^2.3.4",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
@@ -29,12 +34,14 @@
     "react-big-calendar": "^1.13.0",
     "react-dom": "^18",
     "react-loading-skeleton": "^3.4.0",
+    "react-select": "^5.8.0",
     "react-slick": "^0.30.2",
     "react-spinners": "^0.13.8",
     "react-timeago": "^7.2.0",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.0",
     "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.11",
     "twilio": "^5.1.1",
     "yup": "^1.4.0"
   },

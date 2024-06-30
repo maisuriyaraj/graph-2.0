@@ -3,6 +3,7 @@ import React from 'react';
 import { cookies } from "next/headers";
 import GraphScheduleModal from './component/ScheduleCrediantialmodal';
 import { postRequest } from '@/lib/api.service';
+import GraphAddScheduleModal from './component/AddCalenderEventsModal';
 
 
 async function getCalenderCradiantials(){
