@@ -53,7 +53,7 @@ export default function MainHeader() {
           {/* <Image src={logo2} id="logo" alt="logo" width={100} /> */}
         </div>
         <div className="w-1/2 cursor-pointer">
-          <div className="dropdown mx-2 inline-block relative" id="filter-dropdown">
+          {/* <div className="dropdown mx-2 inline-block relative" id="filter-dropdown">
             <button onClick={() => setOpen(!open)} className="bg-green-600 w-full text-white font-semibold py-2 px-4 rounded inline-flex items-center">
               <span className="mr-1">{searchFilter}</span>
               <i className="bi bi-chevron-down"></i>
@@ -92,14 +92,14 @@ export default function MainHeader() {
                 </a>
               </li>
             </ul>}
-          </div>
+          </div> */}
           <input type="search" name="search" id="search" placeholder="Search here ..." className="w-[70%] px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-green-200  input-controls" />
         </div>
         <div className="w-1/2 flex items-center justify-end h-12">
           <div className="mx-2 flex gap-2 relative cursor-pointer">
-            <button className="bg-white rounded-lg transition-all  text-green-600 border border-solid border-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 inline-flex items-center">
+            {/* <button className="bg-white rounded-lg transition-all  text-green-600 border border-solid border-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 inline-flex items-center">
               <a className="" href="#"> <i className="bi bi-plus-circle"></i> New Community </a>
-            </button>
+            </button> */}
             <button className="bg-white rounded-lg transition-all text-green-600 border border-solid border-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 inline-flex items-center">
               <Link className="" href="/dashboard/schedule"> <i className="bi bi-calendar4-range"></i> My Schedule </Link>
             </button>
@@ -177,45 +177,13 @@ export default function MainHeader() {
               </div>
             </div>
           </div>
-          <div className="mx-2 relative cursor-pointer" title="Theme">
-            {/* <div className="dropdown mx-2 inline-block relative">
-              <button onClick={() => setOpenTheme(!openTheme)} className="bg-green-600 w-full text-white py-2 px-4 rounded inline-flex items-center">
-                <span className="mx-1">{Theme == 'Light' && <i className="bi bi-brightness-high"></i>}{Theme == 'Dark' && <i className="bi bi-moon"></i>}</span>
-                <span className="mr-1">{Theme}</span>
-                <i className="bi bi-chevron-down"></i>
-              </button>
-              {openTheme && <ul className="dropdown-menu bg-white absolute shadow-xl rounded-md text-gray-700 pt-1">
-                <li className={`${Theme == 'Light' && "activeFilter"}`}>
-                  <a
-                    className="rounded-t cursor-pointer bg-white hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                    onClick={() => changeTheme('Light')}
-                  >
-                    Light
-                  </a>
-                </li>
-                <li className={`${Theme == 'Dark' && "activeFilter"} border`}>
-                  <a
-                    className="bg-white cursor-pointer hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                    onClick={() => changeTheme('Dark')}
-                  >
-                    Dark
-                  </a>
-                </li>
-                <li className={`${Theme == 'Default' && "activeFilter"} border`}>
-                  <a
-                    className="bg-white cursor-pointer hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                    onClick={() => changeTheme('Default')}
-                  >
-                    Default
-                  </a>
-                </li>
-              </ul>}
-            </div> */}
+          {/* <div className="mx-2 relative cursor-pointer" title="Theme">
+
             <div className="toggle">
               <input type="checkbox" />
               <label></label>
             </div>
-          </div>
+          </div> */}
         </div>
       </nav>
     </div>

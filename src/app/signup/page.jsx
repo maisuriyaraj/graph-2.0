@@ -5,7 +5,7 @@ import { object, ref, string } from 'yup';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { getAuth } from "firebase/auth";
 import { signInWithPopup, GoogleAuthProvider,GithubAuthProvider } from "firebase/auth";
-import app from "../../../config";
+import {app} from "../../../config";
 import { postRequest } from "@/lib/api.service";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

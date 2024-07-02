@@ -11,12 +11,12 @@ export async function POST(request) {
             let AIChats = [];
             AIChats = userData?.AIbotChats || [];
             let ChatCollection = new AIBotModel({
-                userId:userId,
+                userId: userId,
                 chatTitle: "My Chat.."
             });
             let result = await ChatCollection.save();
-            AIChats.push(result._id);
-            let userChatsUpdate = await userModel.updateOne({ _id: userId }, { $set: { AIbotChats: AIChats } });
+            // AIChats.push(result._id);
+            // let userChatsUpdate = await userModel.updateOne({ _id: userId }, { $set: { AIbotChats: AIChats } });
             return NextResponse.json({ status: true, message: "Chat Addedd Successfully !" }, { status: 201 });
         } else {
             return NextResponse.json({ status: false, message: "Please Provide user ID !" });
@@ -32,10 +32,10 @@ export async function GET(request) {
     const userId = searchParams.get('userId');
     try {
         const updatedUserChats = await AIBotModel.find({ userId: userId });
-        if(updatedUserChats){
+        if (updatedUserChats) {
             return NextResponse.json({ status: true, message: "Chat Fetched Successfully !", data: updatedUserChats }, { status: 201 });
-        }else{
-            return NextResponse.json({status:false,message:"Not Available Chats !"});
+        } else {
+            return NextResponse.json({ status: false, message: "Not Available Chats !" });
         }
     } catch (error) {
         console.log(error);

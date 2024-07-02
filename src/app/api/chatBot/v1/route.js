@@ -1,46 +1,45 @@
-import { AIBotModel } from "@/lib/models";
+import { AIBotModel, userModel } from "@/lib/models";
 import { NextResponse } from "next/server";
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-
-// The Gemini 1.5 models are versatile and work with most use cases
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-/**
- * @description AI Integration API
- * @param {*} request contains Request Details about Endpoint 
- * @returns Response 
- */
 export async function POST(request) {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
     try {
-        const payload = await request.json();
-
-        const prompt = payload.prompt.trim();
-        const chatRoomId = payload.ChatroomId;
-
-        if(prompt.length >= 5000){
-            return NextResponse.json({status:false,message:"Your Prompt is too long !"});
+        if (userId) {
+            const userData = await userModel.findOne({ _id: userId }).select({ password: 0 });
+            let AIChats = [];
+            AIChats = userData?.AIbotChats || [];
+            let ChatCollection = new AIBotModel({
+                userId:userId,
+                chatTitle: "My Chat.."
+            });
+            let result = await ChatCollection.save();
+            AIChats.push(result._id);
+            let userChatsUpdate = await userModel.updateOne({ _id: userId }, { $set: { AIbotChats: AIChats } });
+            return NextResponse.json({ status: true, message: "Chat Addedd Successfully !" }, { status: 201 });
+        } else {
+            return NextResponse.json({ status: false, message: "Please Provide user ID !" });
         }
-        const chatRoom = await AIBotModel.findOne({_id:chatRoomId});
-        console.log(chatRoom);
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        let chats = chatRoom?.chats || [];
-        let chatObj = {
-            userMessage:prompt,
-            AiReply:text.trim()
-        }
-        chats.push(chatObj);
-        let updateChatRoom = await AIBotModel.updateOne({_id:chatRoomId},{$set:{chatTitle:chats[0].userMessage,chats:chats}});
-    
-        return NextResponse.json({status:true,message:"Prompt Generated Successfully !",prompt:text,updateChatRoom:updateChatRoom});
     } catch (error) {
         console.log(error);
-        return NextResponse.json({ status: false, message: "Unbale to Provide Service !" });
+        return NextResponse.json({ status: false, message: "Unable to Provide Service !", error: error });
     }
+}
+
+export async function GET(request) {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    try {
+        const updatedUserChats = await AIBotModel.find({ userId: userId });
+        if(updatedUserChats){
+            return NextResponse.json({ status: true, message: "Chat Fetched Successfully !", data: updatedUserChats }, { status: 201 });
+        }else{
+            return NextResponse.json({status:false,message:"Not Available Chats !"});
+        }
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({ status: false, message: "Unable to Provide Service !", error: error });
+    }
+
 }

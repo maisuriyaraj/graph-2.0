@@ -11,7 +11,7 @@ const localizer = momentLocalizer(moment);
 export default function MyCalendar(props) {
 
     const [loader, setLoader] = useState(true);
-    const [openAddEvents,setOpenAddEvents] = useState(false);
+    const [openAddEvents, setOpenAddEvents] = useState(false);
     useEffect(() => {
         setLoader(true);
         setTimeout(() => {
@@ -29,19 +29,21 @@ export default function MyCalendar(props) {
         <>
             <div className='h-[100vh]'>
                 {loader && <div className='w-full flex justify-center'> <HashLoaderComponent isLoading={loader} /> </div>}
-                {!loader && 
-                <>
-                <button onClick={() => setOpenAddEvents(true)}>Add Events</button>
-                <Calendar
-                    localizer={localizer}
-                    events={dummyEvents}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: 500 }}
-                />
-                        {openAddEvents && <GraphAddScheduleModal closeModal={() => setOpenAddEvents(false)}  />}
+                {!loader &&
+                    <>
+                        <div className='w-full text-right mb-3 mt-3'>
+                            <button onClick={() => setOpenAddEvents(true)} className='bg-green-600 text-white p-3 rounded-md'><i className="bi bi-plus-square-fill mx-2"></i> Add Events</button>
+                        </div>
+                        <Calendar
+                            localizer={localizer}
+                            events={dummyEvents}
+                            startAccessor="start"
+                            endAccessor="end"
+                            style={{ height: 500 }}
+                        />
+                        {openAddEvents && <GraphAddScheduleModal closeModal={() => setOpenAddEvents(false)} />}
 
-                </>
+                    </>
                 }
             </div>
         </>

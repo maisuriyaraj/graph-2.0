@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { getRequest, postRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
 import { HashLoaderComponent } from '@/app/components/loader';
+import { toast,ToastContainer } from 'react-toastify';
 
 export default function GraphAI() {
 
@@ -32,11 +33,12 @@ export default function GraphAI() {
 
   function getUserChatList() {
     const userId = JSON.parse(Cookies.get('userId'));
-    getRequest(`http://localhost:3000/api/chatBot?userId=${userId}`).then((response) => {
+    getRequest(`http://localhost:3000/api/chatBot/v1?userId=${userId}`).then((response) => {
       console.log(response)
       let list2 = response?.data?.data;
       let list = response?.data?.data.reverse();
       setChatsRooms(list || []);
+      chatDiv.scrollTo(0,document.scrollHeight);
       // if(selectedChat == null && ){
       //   setSelectedChat(list2[0]);
       // }
@@ -48,7 +50,7 @@ export default function GraphAI() {
   const addNewChat = () => {
     const userId = JSON.parse(Cookies.get('userId'));
     const BearerToken = JSON.parse(Cookies.get('AuthToken'));
-    postRequest(`http://localhost:3000/api/chatBot?userId=${userId}`).then((response) => {
+    postRequest(`http://localhost:3000/api/chatBot/v1?userId=${userId}`).then((response) => {
       console.log(response);
 
     }).then(() => {
@@ -59,12 +61,22 @@ export default function GraphAI() {
   }
 
   const sendMessage = () => {
+
+    if(userPrompt == ""){
+      toast.error("Please Provide Some prompt !");
+      return;
+    }
     const payload = {
       "prompt": userPrompt,
       "ChatroomId": selectedChat._id
     }
-    postRequest('http://localhost:3000/api/chatBot/v1', payload).then((response) => {
+    postRequest('http://localhost:3000/api/chatBot/v1/prompt', payload).then((response) => {
       console.log(response);
+      setPrompt("");
+
+      if(response.status == 201){
+        setSelectedChat(response?.data?.updateChatRoom)
+      }
       getUserChatList();
     }).catch(err => {
       console.log(err);
@@ -74,6 +86,8 @@ export default function GraphAI() {
   return (
     // <div className='h-[100vh] w-full px-5 overflow-hidden' id='graphAi'>
     <div className="flex antialiased text-gray-800 overflow-x-hidden overflow-y-hidden">
+              <ToastContainer />
+
       {!loader && <div className="flex flex-row h-full w-full">
         <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
           <div className="flex flex-row items-center justify-center h-12 w-full">
@@ -122,7 +136,7 @@ export default function GraphAI() {
           {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
             <div className="flex flex-col h-full overflow-x-auto mb-4">
               {selectedChat.chats.map((chat) => (
-                <div className="flex flex-col h-full" key={chat._id}>
+                <div className="flex flex-col h-full" id='chatBoard' key={chat._id}>
                   <div className="grid grid-cols-12 gap-y-2">
                     <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
                       <div className="flex items-center justify-start flex-row-reverse">

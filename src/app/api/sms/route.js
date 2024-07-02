@@ -13,12 +13,17 @@ export async function POST(request) {
     let token = userToken.get('Authorization') || null;
 
     try {
-        // jwt.verify(token,secreate_key);
-        if (payload?.phone) {
-            sendSMSService(payload.phone, payload.smsBody);
-            return NextResponse.json({ status: true, message: "SMS Sent Successfully !" },{status:201});
-        } else {
-            return NextResponse.json({ status: false, message: "Please Provide Email Address !!" })
+        try {
+            jwt.verify(token, secreate_key);
+            if (payload?.phone) {
+                sendSMSService(payload.phone, payload.smsBody);
+                return NextResponse.json({ status: true, message: "SMS Sent Successfully !" }, { status: 201 });
+            } else {
+                return NextResponse.json({ status: false, message: "Please Provide Email Address !!" })
+            }
+        } catch (error) {
+            return NextResponse.json({ status: false, message: "Your Session is Expired !" }, { status: 200 })
+
         }
     } catch (error) {
         console.log(error);

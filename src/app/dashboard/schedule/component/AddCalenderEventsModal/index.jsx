@@ -1,8 +1,5 @@
 "use client";
-import { postRequest } from '@/lib/api.service';
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import '../../calender.css';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -12,19 +9,18 @@ import { timeZoneList } from '@/lib/timezone';
 import Select from 'react-select'
 
 
-
 export default function GraphAddScheduleModal(props) {
 
     const [authAnimation, setAnimation] = useState();
-    const [loader, setLoader] = useState(false);
-    const [dateRange, setDateRange] = useState();
-    const [isSubmitted, setSubmitted] = useState(false);
-    const [txtValue, setValue] = useState(props.fieldValue);
-    const router = useRouter();
+    const [eventTitle,setTitle] = useState("");
+    const [isAllDay,setAllDay] = useState(true);
+    const [startDate,setStartDate] = useState();
+    const [endDate,setEndDate] = useState();
+    const [timeZone,setTimeZone] = useState();
 
     const timeZones = timeZoneList.zones.map((x) => ({
-        value:x.value,
-        label:x.value
+        value: x.value,
+        label: x.value
     }))
 
     useEffect(() => {
@@ -53,8 +49,16 @@ export default function GraphAddScheduleModal(props) {
         }, 900);
     }
 
-    const handleDateRange = (event) => {
-        console.log(event);
+    const handleAddEvents = (e) => {
+        e.preventDefault();
+        const payload = {
+            title:eventTitle,
+            allDay:isAllDay,
+            start : startDate._d,
+            end:endDate._d,
+            zone:timeZone
+        }
+        console.log()
     }
 
 
@@ -77,53 +81,61 @@ export default function GraphAddScheduleModal(props) {
                             <h1 className="text-green-600 text-4xl font-[Montserrat] mb-4 text-center">
                                 Add Events
                             </h1>
-                            <div className='w-full mt-2 mb-2 h-auto relative'>
-                                <div className="flex items-center mb-2 justify-between">
-                                    <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Add Event Title</label>
+                            <form>
+                                <div className='flex gap-2 items-center'>
+                                    <div className='w-1/2 mt-2 mb-2 h-auto relative'>
+                                        <div className="flex items-center mb-2 justify-between">
+                                            <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Add Event Title</label>
+                                        </div>
+                                        <input type='text' value={eventTitle} onChange={(e) => setTitle(e.target.value)} className='w-full p-3 border-2 border-gray-200 rounded-md outline-none focus:border-green-600' name='eventTitle' id='eventTitle' autoFocus={true} required />
+                                    </div>
                                 </div>
-                                <input type='text' className='w-full p-3 border border-2 border-gray-200 rounded-lg outline-none focus:border-green-600' name='eventTitle' id='eventTitle' />
-                            </div>
-                            <div className='w-full mt-2 mb-2 h-auto relative'>
-                                <div className="flex items-center mb-2 justify-between">
-                                    <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Select Start Date</label>
+                                <div className='w-full mt-2 flex items-center  mb-2 relative' id='allDayCheck'>
+                                    <input type="checkbox" name="allDay" id="allDay" checked={isAllDay} onChange={(e)=>setAllDay(e.target.checked)} />
+                                    <label htmlFor="allDay">All Day</label>
                                 </div>
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DateTimePicker className='w-full outline-none focus:border border-green-500' />
-                                </LocalizationProvider>
-                            </div>
-                            <div className='w-full mt-2 mb-2 h-auto relative'>
-                                <div className="flex items-center mb-2 justify-between">
-                                    <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Select End Date</label>
-                                </div>
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <DateTimePicker className='w-full outline-none focus:border border-green-500' />
-                                </LocalizationProvider>
-                            </div>
-                            <div className='w-full mt-2 mb-2 h-auto relative'>
-                                <div className="flex items-center mb-2 justify-between">
-                                    <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Select Time Zone</label>
-                                </div>
+                                {!isAllDay && <div className='flex gap-2'>
+                                    <div className='w-1/2 mt-2 mb-2 h-auto relative'>
+                                        <div className="flex items-center mb-2 justify-between">
+                                            <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Select Start Date</label>
+                                        </div>
+                                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                                            <DateTimePicker className='w-full outline-none focus:border border-green-500' value={startDate} onChange={(e)=> setStartDate(e)} />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className='w-1/2 mt-2 mb-2 h-auto relative'>
+                                        <div className="flex items-center mb-2 justify-between">
+                                            <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Select End Date</label>
+                                        </div>
+                                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                                            <DateTimePicker className='w-full outline-none focus:border border-green-500' value={endDate} onChange={(e)=>setEndDate(e)} />
+                                        </LocalizationProvider>
+                                    </div>
+                                </div>}
+                                <div className='w-full mt-2 mb-2 h-auto relative'>
+                                    <div className="flex items-center mb-2 justify-between">
+                                        <label htmlFor="eventTitle" className="text-sm font-semibold text-gray-500">Select Time Zone</label>
+                                    </div>
+                                    <Select options={timeZones} value={timeZone} onChange={(e)=> setTimeZone(e)} required />
 
-                                {/* <select name="" id="" className='w-full p-3 border border-2 border-gray-200 rounded-lg outline-none focus:border-green-600'>
-                                    <option value="" hidden selected>Select an Time Zone</option>
-                                    {
-                                        timeZoneList.zones.map((x) => (
-                                            <option value={x.value}>{x.value}</option>
-                                        ))
-                                    }
-                                </select> */}
-                                <Select options={timeZones} />
-
-                            </div>
-                            <div className='text-end'>
-                                <button
-                                    type='button'
-                                    onClick={closeAuthModal}
-                                    className="px-4 py-2 mt-2 text-lg mx-1 transition-colors duration-300 bg-white border text-green-600 rounded-md shadow hover:bg-green-600 hover:text-white focus:outline-none focus:ring-blue-200 focus:ring-4"
-                                >
-                                    Cancle
-                                </button>
-                            </div>
+                                </div>
+                                <div className='text-end'>
+                                    <button
+                                        type='submit'
+                                        onClick={(e) => handleAddEvents(e)}
+                                        className="px-4 py-2 mt-2 text-lg mx-1 transition-colors duration-300 bg-green-600  border text-white rounded-md shadow focus:outline-none focus:ring-green-200 focus:ring-4"
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        type='button'
+                                        onClick={closeAuthModal}
+                                        className="px-4 py-2 mt-2 text-lg mx-1 transition-colors duration-300 bg-white border text-green-600 rounded-md shadow hover:bg-green-600 hover:text-white focus:outline-none focus:ring-blue-200 focus:ring-4"
+                                    >
+                                        Cancle
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import { object, ref, string } from 'yup';
 import { Field, Form, ErrorMessage, Formik } from 'formik';
 import { getAuth } from "firebase/auth";
 import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
-import app from "../../../config";
+import {app} from "../../../config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
