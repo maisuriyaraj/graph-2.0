@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import botImg from '../../../../public/bot-img.png'
-import robot from '../../../../public/robot.png'
-import man from '../../../../public/man.png'
+import botImg from '../../../../../public/bot-img.png'
+import robot from '../../../../../public/robot.png'
+import man from '../../../../../public/man.png'
 
 import Image from 'next/image';
 import { getRequest, postRequest } from '@/lib/api.service';

@@ -20,25 +20,13 @@ export async function POST(request) {
         const payload = await request.json();
 
         const prompt = payload.prompt.trim();
-        const chatRoomId = payload.ChatroomId;
-
         if(prompt.length >= 5000){
             return NextResponse.json({status:false,message:"Your Prompt is too long !"});
         }
-        const chatRoom = await AIBotModel.findOne({_id:chatRoomId});
-        console.log(chatRoom);
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
-        let chats = chatRoom?.chats || [];
-        let chatObj = {
-            userMessage:prompt,
-            AiReply:text.trim()
-        }
-        chats.push(chatObj);
-        let updateChatRoom = await AIBotModel.updateOne({_id:chatRoomId},{$set:{chatTitle:chats[0].userMessage,chats:chats}});
-    
-        return NextResponse.json({status:true,message:"Prompt Generated Successfully !",prompt:text,updateChatRoom:updateChatRoom});
+        return NextResponse.json({status:true,message:"Prompt Generated Successfully !",prompt:text});
     } catch (error) {
         console.log(error);
         return NextResponse.json({ status: false, message: "Unbale to Provide Service !" });

@@ -60,7 +60,7 @@ export default function SideNav({ userData }) {
             <Link href="#">Communities</Link>
           </li>
           <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/graphAI' ? 'activePath' : ''} mt-1`}>
-            <Link href="/dashboard/graphAI">GraphAI</Link>
+            <Link href="/dashboard/graphAI/v1">GraphAI</Link>
           </li>
         </ul>
       </div>
