@@ -22,7 +22,8 @@ export async function POST(request) {
                 return NextResponse.json({ status: false, message: "Please Provide Email Address !!" })
             }
         } catch (error) {
-            return NextResponse.json({ status: false, message: "Your Session is Expired !" }, { status: 200 })
+            return NextResponse.redirect('/',302);
+            // return NextResponse.json({ status: false, message: "Your Session is Expired !" }, { status: 200 })
 
         }
     } catch (error) {

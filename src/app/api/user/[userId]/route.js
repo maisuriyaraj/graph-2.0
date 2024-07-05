@@ -23,8 +23,9 @@ export async function GET(request, content) {
                 return NextResponse.json({ status: true, data: user, message: "Data Fetched Successfully" }, { status: 201 });
             }
         } catch (error) {
-            console.log(error)
-            return NextResponse.json({ status: false, message: "Token is Expired !" });
+            console.log(error);
+            return NextResponse.redirect('/',302);
+            // return NextResponse.json({ status: false, message: "Token is Expired !" });
         }
     } catch (error) {
         console.log(error);

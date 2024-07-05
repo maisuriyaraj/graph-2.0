@@ -3,12 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import botImg from '../../../../../public/bot-img.png'
 import robot from '../../../../../public/robot.png'
 import man from '../../../../../public/man.png'
-
+import SyncLoader from "react-spinners/SyncLoader";
 import Image from 'next/image';
 import { getRequest, postRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
 import { HashLoaderComponent } from '@/app/components/loader';
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function GraphAI() {
 
@@ -16,7 +16,7 @@ export default function GraphAI() {
   const [chatsConversations, setChatsRooms] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [userPrompt, setPrompt] = useState("");
-  const [loader,setLoader] = useState(true);
+  const [loader, setLoader] = useState(true);
 
   const isInitialMount = useRef(true);
 
@@ -31,6 +31,14 @@ export default function GraphAI() {
     }
   }, []);
 
+  const chatboardDivRef = useRef(null);
+
+  useEffect(() => {
+      if (chatboardDivRef.current) {
+          chatboardDivRef.current.scrollTop = chatboardDivRef.current.scrollHeight;
+      }
+  }, [chatsConversations]); // Re-run the effect whenever messages change
+
   function getUserChatList() {
     const userId = JSON.parse(Cookies.get('userId'));
     getRequest(`http://localhost:3000/api/chatBot/v1?userId=${userId}`).then((response) => {
@@ -38,7 +46,7 @@ export default function GraphAI() {
       let list2 = response?.data?.data;
       let list = response?.data?.data.reverse();
       setChatsRooms(list || []);
-      chatDiv.scrollTo(0,document.scrollHeight);
+      chatDiv.scrollTo(0, document.scrollHeight);
       // if(selectedChat == null && ){
       //   setSelectedChat(list2[0]);
       // }
@@ -62,7 +70,7 @@ export default function GraphAI() {
 
   const sendMessage = () => {
 
-    if(userPrompt == ""){
+    if (userPrompt == "") {
       toast.error("Please Provide Some prompt !");
       return;
     }
@@ -74,7 +82,7 @@ export default function GraphAI() {
       console.log(response);
       setPrompt("");
 
-      if(response.status == 201){
+      if (response.status == 201) {
         setSelectedChat(response?.data?.updateChatRoom)
       }
       getUserChatList();
@@ -86,7 +94,7 @@ export default function GraphAI() {
   return (
     // <div className='h-[100vh] w-full px-5 overflow-hidden' id='graphAi'>
     <div className="flex antialiased text-gray-800 overflow-x-hidden overflow-y-hidden">
-              <ToastContainer />
+      <ToastContainer />
 
       {!loader && <div className="flex flex-row h-full w-full">
         <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
@@ -134,7 +142,7 @@ export default function GraphAI() {
 
         <div className="flex flex-col flex-auto h-[85vh] overflow-auto p-6">
           {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-            <div className="flex flex-col h-full overflow-x-auto mb-4">
+            <div ref={chatboardDivRef} className="flex flex-col h-full overflow-x-auto mb-4 scroll-smooth">
               {selectedChat.chats.map((chat) => (
                 <div className="flex flex-col h-full" id='chatBoard' key={chat._id}>
                   <div className="grid grid-cols-12 gap-y-2">
@@ -162,6 +170,31 @@ export default function GraphAI() {
                   </div>
                 </div>
               ))}
+              {/* <div className="flex flex-col h-full">
+                <div className="grid grid-cols-12 gap-y-2">
+                  <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
+                    <div className="flex items-center justify-start flex-row-reverse">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-100 flex-shrink-0">
+                        <Image src={man} alt='U' />
+                      </div>
+                      <div className="relative mr-3 text-sm bg-green-100 py-2 px-4 shadow rounded-xl">
+                        <div><SyncLoader size={5} /></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-start-1 bot-chat col-end-8 p-3 rounded-lg">
+                    <div className="flex flex-row items-center">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white flex-shrink-0">
+                        <Image src={botImg} alt="B" />
+                      </div>
+                      <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                        <div><SyncLoader size={5} /></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div> */}
             </div>
             <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
               <div>

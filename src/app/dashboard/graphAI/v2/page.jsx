@@ -36,6 +36,15 @@ export default function GraphAI() {
     }
   }, []);
 
+  const chatboardDivRef = useRef(null);
+
+  useEffect(() => {
+      if (chatboardDivRef.current) {
+          chatboardDivRef.current.scrollTop = chatboardDivRef.current.scrollHeight;
+      }
+  }, [chatsConversations]); // Re-run the effect whenever messages change
+
+
   function getUserChatList() {
     let newChatRef = ref(database);
     get(child(newChatRef, 'chatrooms/' + userId)).then((snapshot) => {
@@ -90,6 +99,7 @@ export default function GraphAI() {
       chats.push(obj);
       let selected = selectedChat;
       selected['chats'] = chats;
+      selected['chatTitle'] = userPrompt;
       setSelectedChat(selected);
       setAiConversations(chats);
       let rooms = chatsConversations || [];
@@ -97,9 +107,9 @@ export default function GraphAI() {
       setChatsRooms(rooms);
       let newChatRef = ref(database);
       console.log(selectedChat)
-      get(child(newChatRef, 'chatrooms/' + userId )).then((snapshot) => {
+      get(child(newChatRef, 'chatrooms/' + userId)).then((snapshot) => {
         if (snapshot.exists()) {
-          update(ref(database, 'chatrooms/' + userId +'/'+selectedIndex),selectedChat).then(()=>{
+          update(ref(database, 'chatrooms/' + userId + '/' + selectedIndex), selectedChat).then(() => {
             getUserChatList();
           })
         }
@@ -160,9 +170,10 @@ export default function GraphAI() {
         </div>
 
         <div className="flex flex-col flex-auto h-[85vh] overflow-auto p-6">
-          {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-            <div className="flex flex-col h-full overflow-x-auto mb-4">
-              {aiConversations?.length && aiConversations.map((chat, i) => (
+          {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4" id='chatboard' >
+            <div ref={chatboardDivRef} className="flex flex-col h-full overflow-x-auto mb-4 scroll-smooth">
+              {aiConversations.map((chat, i) => (
+                <>
                 <div className="flex flex-col h-full" id='chatBoard' key={i}>
                   <div className="grid grid-cols-12 gap-y-2">
                     <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
@@ -188,6 +199,7 @@ export default function GraphAI() {
 
                   </div>
                 </div>
+                </>
               ))}
             </div>
             <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
