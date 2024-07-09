@@ -1,6 +1,7 @@
 import {React} from 'react';
 import HashLoader from 'react-spinners/HashLoader';
 import BarLoader from "react-spinners/BarLoader";
+import ClockLoader from "react-spinners/ClockLoader";
 
 const override = {
     display: "block",
@@ -21,5 +22,16 @@ export function HashLoaderComponent(props){
   size={100}
   speedMultiplier={1}
 />
+  )
+}
+
+export function TimerLoader(){
+  return (
+    <ClockLoader   
+    color="#22c55e"
+    loading
+    size={100}
+    speedMultiplier={1} />
+
   )
 }

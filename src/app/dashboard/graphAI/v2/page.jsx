@@ -8,6 +8,7 @@ import { database } from '../../../../../config';
 import Image from 'next/image';
 import { getRequest, postRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
+import SyncLoader from "react-spinners/SyncLoader";
 import { HashLoaderComponent } from '@/app/components/loader';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -39,12 +40,14 @@ export default function GraphAI() {
   const chatboardDivRef = useRef(null);
 
   useEffect(() => {
-      if (chatboardDivRef.current) {
-          chatboardDivRef.current.scrollTop = chatboardDivRef.current.scrollHeight;
-      }
-  }, [chatsConversations]); // Re-run the effect whenever messages change
+    scrollAuto();
+  }, [chatsConversations,selectedChat]); // Re-run the effect whenever messages change
 
-
+  function scrollAuto() {
+    if (chatboardDivRef.current) {
+      chatboardDivRef.current.scrollTop = chatboardDivRef.current.scrollHeight;
+    }
+  }
   function getUserChatList() {
     let newChatRef = ref(database);
     get(child(newChatRef, 'chatrooms/' + userId)).then((snapshot) => {
@@ -79,46 +82,144 @@ export default function GraphAI() {
     setAiConversations(item?.chats || [])
   }
 
-  const sendMessage = () => {
+  // const sendMessage = () => {
 
-    if (userPrompt == "") {
-      toast.error("Please Provide Some prompt !");
+  //   if (userPrompt == "") {
+  //     toast.error("Please Provide Some prompt !");
+  //     return;
+  //   }
+  //   const payload = {
+  //     "prompt": userPrompt
+  //   }
+  //   let chats = selectedChat?.chats || [];
+
+  //   let obj = {
+  //     user: userPrompt,
+  //     bot: ""
+  //   }
+
+
+
+
+  //   postRequest('http://localhost:3000/api/chatBot/v2/prompt', payload).then((response) => {
+  //     console.log(response);
+  //     // obj = {
+  //     //   user: userPrompt,
+  //     //   bot: response?.data?.prompt
+  //     // }
+  //     obj['bot'] = response?.data?.prompt
+  //     chats.push(obj);
+  //     let selected = selectedChat;
+  //     selected['chats'] = chats;
+  //     selected['chatTitle'] = userPrompt;
+  //     setSelectedChat(selected);
+  //     setAiConversations(chats);
+  //     let rooms = chatsConversations || [];
+  //     rooms[selectedIndex] = selectedChat;
+  //     setChatsRooms(rooms);
+  //     let newChatRef = ref(database);
+  //     console.log(selectedChat)
+  //     get(child(newChatRef, 'chatrooms/' + userId)).then((snapshot) => {
+  //       if (snapshot.exists()) {
+  //         update(ref(database, 'chatrooms/' + userId + '/' + selectedIndex), selectedChat).then(() => {
+  //           getUserChatList();
+  //         })
+  //       }
+  //     });
+  //     setPrompt("");
+  //   }).catch(err => {
+  //     console.log(err);
+  //   })
+  // }
+
+  const sendMessage = async () => {
+    if (!userPrompt) {
+      toast.error("Please provide some prompt!");
       return;
     }
-    const payload = {
-      "prompt": userPrompt
+
+    // Step 1: Update state with the user's message
+    const userMessage = { user: userPrompt, bot: "" };
+    updateChatState(userMessage);
+    const payload = { prompt: userPrompt };
+
+    try {
+      // Step 2: Send the prompt to the bot and get the response
+      const response = await postRequest('http://localhost:3000/api/chatBot/v2/prompt', payload);
+      const botResponse = response?.data?.prompt || "";
+
+      // Step 3: Update the state with the bot's response
+      updateBotResponse(botResponse);
+      await updateDatabase(userPrompt, botResponse);
+      setPrompt("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again.");
+    }
+  };
+
+  const updateChatState = (message) => {
+    let chats = selectedChat?.chats || [];
+
+    chats.push(message);
+
+    const updatedChat = {
+      ...selectedChat,
+      chats,
+      chatTitle: message.user,
+    };
+
+    setSelectedChat(updatedChat);
+    setAiConversations(chats);
+
+    let rooms = chatsConversations || [];
+    rooms[selectedIndex] = updatedChat;
+    setChatsRooms(rooms);
+  };
+
+  const updateBotResponse = (botResponse) => {
+    let chats = selectedChat?.chats || [];
+
+    // Update the last message with the bot's response
+    if (chats.length > 0) {
+      chats[chats.length - 1].bot = botResponse;
     }
 
-    postRequest('http://localhost:3000/api/chatBot/v2/prompt', payload).then((response) => {
-      console.log(response);
-      let chats = selectedChat?.chats || [];
-      let obj = {
-        user: userPrompt,
-        bot: response?.data?.prompt
+    const updatedChat = {
+      ...selectedChat,
+      chats,
+    };
+
+    setSelectedChat(updatedChat);
+    setAiConversations(chats);
+
+    let rooms = chatsConversations || [];
+    rooms[selectedIndex] = updatedChat;
+    setChatsRooms(rooms);
+  };
+
+  const updateDatabase = async (userPrompt, botResponse) => {
+    const newChatRef = ref(database);
+    try {
+      const snapshot = await get(child(newChatRef, 'chatrooms/' + userId));
+      if (snapshot.exists()) {
+        const updatedChat = {
+          ...selectedChat,
+          // {user:userPrompt,bot:botResponse}
+          chats: selectedChat?.chats,
+          chatTitle: userPrompt,
+        };
+        console.log(updatedChat)
+        await update(ref(database, `chatrooms/${userId}/${selectedIndex}`), updatedChat);
+        getUserChatList();
       }
-      chats.push(obj);
-      let selected = selectedChat;
-      selected['chats'] = chats;
-      selected['chatTitle'] = userPrompt;
-      setSelectedChat(selected);
-      setAiConversations(chats);
-      let rooms = chatsConversations || [];
-      rooms[selectedIndex] = selectedChat;
-      setChatsRooms(rooms);
-      let newChatRef = ref(database);
-      console.log(selectedChat)
-      get(child(newChatRef, 'chatrooms/' + userId)).then((snapshot) => {
-        if (snapshot.exists()) {
-          update(ref(database, 'chatrooms/' + userId + '/' + selectedIndex), selectedChat).then(() => {
-            getUserChatList();
-          })
-        }
-      });
-      setPrompt("");
-    }).catch(err => {
-      console.log(err);
-    })
-  }
+    } catch (error) {
+      console.error("Error updating database:", error);
+      toast.error("Failed to update chat in database. Please try again.");
+    }
+  };
+
+
 
   return (
     // <div className='h-[100vh] w-full px-5 overflow-hidden' id='graphAi'>
@@ -159,7 +260,7 @@ export default function GraphAI() {
               {
                 chatsConversations.map((x, i) => (
                   <>
-                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 bg-gray-100`} key={i} onClick={() => handleSelectChat(x, i)}>
+                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 ${selectedIndex == i ? 'bg-gray-100' : 'bg-white'}`} key={i} onClick={() => handleSelectChat(x, i)}>
                       <div className="ml-2 text-sm font-semibold text-left w-40 overflow-hidden" style={{ textWrap: 'nowrap', textOverflow: 'ellipsis' }}>{x?.chatTitle}</div>
                     </button>
                   </>
@@ -174,31 +275,32 @@ export default function GraphAI() {
             <div ref={chatboardDivRef} className="flex flex-col h-full overflow-x-auto mb-4 scroll-smooth">
               {aiConversations.map((chat, i) => (
                 <>
-                <div className="flex flex-col h-full" id='chatBoard' key={i}>
-                  <div className="grid grid-cols-12 gap-y-2">
-                    <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
-                      <div className="flex items-center justify-start flex-row-reverse">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-100 flex-shrink-0">
-                          <Image src={man} alt='U' />
-                        </div>
-                        <div className="relative mr-3 text-sm bg-green-100 py-2 px-4 shadow rounded-xl">
-                          <div>{chat.user}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-1 bot-chat col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white flex-shrink-0">
-                          <Image src={botImg} alt="B" />
-                        </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                          <div>{chat.bot}</div>
+                  <div className="flex flex-col h-full" id='chatBoard' key={i}>
+                    <div className="grid grid-cols-12 gap-y-2">
+                      <div className="col-start-6 user-chat col-end-13 p-3 rounded-lg">
+                        <div className="flex items-center justify-start flex-row-reverse">
+                          <div className="flex items-center justify-center h-10 w-10 rounded-full bg-green-100 flex-shrink-0">
+                            <Image src={man} alt='U' />
+                          </div>
+                          <div className="relative mr-3 text-sm bg-green-100 py-2 px-4 shadow rounded-xl">
+                            <div>{chat.user}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                      <div className="col-start-1 bot-chat col-end-8 p-3 rounded-lg">
+                        <div className="flex flex-row items-center">
+                          <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white flex-shrink-0">
+                            <Image src={botImg} alt="B" />
+                          </div>
+                          <div className="relative ml-3 text-sm bg-white py-3 px-5 shadow rounded-xl">
+                            {chat.bot && <div>{chat.bot}</div>}
+                            {!chat.bot && <SyncLoader size={8} /> }
+                          </div>
+                        </div>
+                      </div>
 
+                    </div>
                   </div>
-                </div>
                 </>
               ))}
             </div>

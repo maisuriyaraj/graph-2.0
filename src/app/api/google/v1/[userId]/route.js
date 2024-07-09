@@ -75,20 +75,22 @@ export async function GET(request,content) {
 
 export async function POST(request,content){
     let userId = content.params.userId;
+    const payload = await request.json();
 
     try {
         let calenderCrediatials = await calenderModel.findOne({userId:userId});
         var event = {
-            'summary': 'HELLO EVENTS',
-            'location': 'Hyderabad,India',
-            'description': 'First event with nodeJS!',
+            'summary': payload?.title || "",
+            'location': payload?.location || null,
+            'allDay' : payload?.allDay ,
+            'description': payload?.description || "",
             'start': {
-              'dateTime': '2024-08-12T09:00:00-07:00',
-              'timeZone': 'Asia/Dhaka',
+              'dateTime': payload?.start,
+              'timeZone': payload?.zone,
             },
             'end': {
-              'dateTime': '2024-08-14T17:00:00-07:00',
-              'timeZone': 'Asia/Dhaka',
+              'dateTime': payload?.end,
+              'timeZone': payload?.zone,
             },
             'attendees': [],
             'reminders': {
@@ -103,9 +105,6 @@ export async function POST(request,content){
             oauth2Client.setCredentials({
                 access_token:calenderCrediatials.access_token,
                 refresh_token:calenderCrediatials.refresh_token
-                // scope:calenderCrediatials.scope,
-                // token_type:calenderCrediatials.token_type,
-                // expiry_date:calenderCrediatials.expiry_date
             });
 
            const response = await addCalenderEvents(event);

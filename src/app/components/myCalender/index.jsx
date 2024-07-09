@@ -6,24 +6,40 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { HashLoaderComponent } from '../loader';
 import { useEffect, useState } from 'react';
 import GraphAddScheduleModal from '@/app/dashboard/schedule/component/AddCalenderEventsModal';
+import { getRequest } from '@/lib/api.service';
+import Cookies from 'js-cookie';
 const localizer = momentLocalizer(moment);
 
 export default function MyCalendar(props) {
 
     const [loader, setLoader] = useState(true);
+    const userId = JSON.parse(Cookies.get('userId'));
+    const token = JSON.parse(Cookies.get('AuthToken'));
+    const [calenderEvents,setCalenderEvents] = useState([]);
     const [openAddEvents, setOpenAddEvents] = useState(false);
     useEffect(() => {
         setLoader(true);
         setTimeout(() => {
             setLoader(false)
         }, 2000);
+        getCalenderEvents();
     }, []);
-    const dummyEvents = props?.events && props?.events.map((x) => ({
-        'title': x?.summary || "N/A",
-        'allDay': true,
-        'start': x?.start?.dateTime,
-        'end': x?.end?.dateTime
-    })) || [];
+
+    function getCalenderEvents(){
+        getRequest(`http://localhost:3000/api/google/v1/${userId}`).then((response)=>{
+            if(response){
+                console.log(response)
+                const dummyEvents = response.data?.calenderData && response.data?.calenderData.map((x) => ({
+                    'title': x?.summary || "N/A",
+                    // 'allDay': false,
+                    'start': new Date(x?.start?.dateTime),
+                    'end': new Date(x?.end?.dateTime)
+                })) || [];
+                setCalenderEvents(dummyEvents);
+            }
+        })
+    }
+    
 
     return (
         <>
@@ -36,12 +52,12 @@ export default function MyCalendar(props) {
                         </div>
                         <Calendar
                             localizer={localizer}
-                            events={dummyEvents}
+                            events={calenderEvents}
                             startAccessor="start"
                             endAccessor="end"
                             style={{ height: 500 }}
                         />
-                        {openAddEvents && <GraphAddScheduleModal closeModal={() => setOpenAddEvents(false)} />}
+                        {openAddEvents && <GraphAddScheduleModal onRefresh={getCalenderEvents} closeModal={() => setOpenAddEvents(false)} />}
 
                     </>
                 }
