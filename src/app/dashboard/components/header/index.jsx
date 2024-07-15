@@ -2,11 +2,16 @@
 import Image from "next/image";
 import '../../global.css';
 import avatar from '../../../../../public/user.png'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { fetchUsers } from "@/redux/slice/users";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
-export default function MainHeader() {
+export default function MainHeader(props) {
+  const userID = JSON.parse(Cookies.get('userId'));
+  const BearerToken = JSON.parse(Cookies.get('AuthToken'));
   const [open, setOpen] = useState(false);
   const [openTheme, setOpenTheme] = useState(false);
   const navigate = useRouter();
@@ -19,6 +24,16 @@ export default function MainHeader() {
     setFilter(filter);
     setOpen(false);
   }
+
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(fetchUsers({ userID, BearerToken }));
+  }, [])
+
+  const { userData, loading, value } = useSelector((state) => state.user);
+
 
   const openDropMenuonHover = (id) => {
     let element = document.getElementById(id);
@@ -35,81 +50,62 @@ export default function MainHeader() {
     }
   }
 
-  function goToHome(path){
+  function goToHome(path) {
     navigate.push(path);
-}
+  }
 
   const changeTheme = (theme) => {
     setTheme(theme)
     setOpenTheme(false);
   }
+
+  function openSideNav(){
+    console.log("OPEN")
+    let nav = document.getElementById('sideNav');
+    if(nav){
+      console.log(nav.style);
+      if(nav.classList.contains('hide')){
+        nav.classList.add('show');
+        nav.classList.remove('hide');
+      }else{
+        nav.classList.add('hide');
+        nav.classList.remove('show');
+      }
+    }
+  }
   return (
-    <div className='w-full z-[1111] bg-white border border-solid  fixed top-0 py-4 px-12' id="headerMain">
-      <nav className="w-full flex items-center px-4">
-        <div className="w-1/6 cursor-pointer text-start space-x-3 lg:pr-16 pr-6">
-          <h2 className="font-normal logo text-2xl leading-6" id='logo' onClick={() => {goToHome('/dashboard')}}>
+    <div className='z-[1111] bg-white border border-solid  fixed top-0 py-4' id="headerMain">
+      <nav className="w-screen flex justify-between items-center px-4">
+        <div className="cursor-pointer text-start space-x-3">
+          <h2 className="font-normal logo text-2xl leading-6" id='logo' onClick={() => { goToHome('/dashboard') }}>
             Graph <span>Community</span>
           </h2>
           {/* <Image src={logo2} id="logo" alt="logo" width={100} /> */}
         </div>
-        <div className="w-1/2 cursor-pointer">
-          {/* <div className="dropdown mx-2 inline-block relative" id="filter-dropdown">
-            <button onClick={() => setOpen(!open)} className="bg-green-600 w-full text-white font-semibold py-2 px-4 rounded inline-flex items-center">
-              <span className="mr-1">{searchFilter}</span>
-              <i className="bi bi-chevron-down"></i>
-            </button>
-            {open && <ul className="dropdown-menu bg-white absolute shadow-xl rounded-md text-gray-700 pt-1">
-              <li className={`${searchFilter == 'Jobs' && "activeFilter"}`}>
-                <a
-                  className="rounded-t bg-white hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                  onClick={() => opFilter('Jobs')}
-                >
-                  Jobs
-                </a>
-              </li>
-              <li className={`${searchFilter == 'Developers' && "activeFilter"} border`}>
-                <a
-                  className="bg-white hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                  onClick={() => opFilter('Developers')}
-                >
-                  Developers
-                </a>
-              </li>
-              <li className={`${searchFilter == 'Communities' && "activeFilter"} border`}>
-                <a
-                  className="bg-white hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                  onClick={() => opFilter('Communities')}
-                >
-                  Communities
-                </a>
-              </li>
-              <li className={`${searchFilter == 'All' && "activeFilter"} border`}>
-                <a
-                  className="bg-white hover:bg-gray-200   py-2 px-4 block whitespace-no-wrap"
-                  onClick={() => opFilter('All')}
-                >
-                  All
-                </a>
-              </li>
-            </ul>}
-          </div> */}
+        {/* <div className="w-1/2 cursor-pointer">
           <input type="search" name="search" id="search" placeholder="Search here ..." className="w-[70%] px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-green-200  input-controls" />
-        </div>
-        <div className="w-1/2 flex items-center justify-end h-12">
-          <div className="mx-2 flex gap-2 relative cursor-pointer">
+        </div> */}
+        <div className="w-auto flex items-center justify-end h-12">
+          <div className="mx-3 flex gap-2 relative cursor-pointer lg:hidden">
+            <button onClick={() => openSideNav()}><i className="bi bi-list text-3xl"></i></button>
+          </div>
+          <div className="mx-3 flex gap-2 relative cursor-pointer">
+            <i className="bi bi-search text-2xl"></i>
+          </div>
+          <div className="mx-3 flex gap-2 relative cursor-pointer">
             {/* <button className="bg-white rounded-lg transition-all  text-green-600 border border-solid border-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 inline-flex items-center">
               <a className="" href="#"> <i className="bi bi-plus-circle"></i> New Community </a>
             </button> */}
-            <button className="bg-white rounded-lg transition-all text-green-600 border border-solid border-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 inline-flex items-center">
-              <Link className="" href="/dashboard/schedule"> <i className="bi bi-calendar4-range"></i> My Schedule </Link>
+            <button>
+              <Link className="" href="/dashboard/schedule"> <i className="bi bi-calendar4-range text-2xl"></i></Link>
             </button>
           </div>
-          <div className="mx-2 relative cursor-pointer" title="Profile">
+          {/* <div className="mx-2 relative cursor-pointer" title="Profile">
             <Image src={avatar} alt="avatar" width={20} />
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-500 animate-ping"></div>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-600"></div>
-          </div>
-          <div className="mx-2 relative cursor-pointer" onMouseEnter={() => openDropMenuonHover('drop_1')} onMouseLeave={() => openDropMenuonHover('drop_1')}>
+          </div> */}
+          {/* <div className="mx-2 relative cursor-pointer" onMouseEnter={() => openDropMenuonHover('drop_1')} onMouseLeave={() => openDropMenuonHover('drop_1')}>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-500 animate-ping"></div>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-600"></div>
             <i className="bi bi-award"></i>
@@ -142,9 +138,10 @@ export default function MainHeader() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+
           <div className="mx-2 relative cursor-pointer" onMouseEnter={() => openDropMenuonHover('drop_2')} onMouseLeave={() => openDropMenuonHover('drop_2')}>
-            <i className="bi bi-bell"></i>
+            <i className="bi bi-bell text-2xl"></i>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-500 animate-ping"></div>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-600"></div>
             <div className="dropdown-menu w-[30vw] z-50 hidden bg-white right-[-7rem]  absolute border border-solid rounded-md text-gray-700 p-4" id="drop_2">

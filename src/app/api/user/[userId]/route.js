@@ -8,7 +8,7 @@ const secreate_key = process.env.SECREATE_KEY
 export async function GET(request, content) {
     try {
         let userToken = headers();
-        let token = userToken.get('Authorization') || null;
+        let token = userToken.get('Authorization').split(' ')[1] || null;
         if(token === null){
             return NextResponse.json({status:false,message:"Please Provide Auth Token !!"});
         }

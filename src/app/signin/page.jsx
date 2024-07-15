@@ -6,13 +6,13 @@ import { object, ref, string } from 'yup';
 import { Field, Form, ErrorMessage, Formik } from 'formik';
 import { getAuth } from "firebase/auth";
 import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
-import {app} from "../../../config";
+import { app } from "../../../config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import { postRequest, putRequest } from '@/lib/api.service';
 import { useRouter } from 'next/navigation';
-import {Loader} from '../components/loader';
+import { Loader } from '../components/loader';
 
 export default function SignIn() {
   const route = useRouter();
@@ -23,14 +23,8 @@ export default function SignIn() {
 
   }, []);
 
-  const showLoader = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }
-
   const signInWithGoogle = async () => {
+    setLoading(true);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     try {
@@ -41,7 +35,6 @@ export default function SignIn() {
         userName: data.user.displayName,
         googleAccount: true
       });
-      showLoader();
 
       if (response.data.status) {
         Cookies.set('AuthToken', JSON.stringify(`Bearer ${response.data.token}`, { expires: 7 }));
@@ -53,13 +46,14 @@ export default function SignIn() {
       } else {
         toast.error(response.data.message);
       }
-      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error)
     }
   }
 
   const signInWithGitHub = async () => {
+    setLoading(true);
     const auth = getAuth(app);
     const provider = new GithubAuthProvider();
     try {
@@ -70,7 +64,6 @@ export default function SignIn() {
         userName: data.user.displayName,
         githubAccount: true
       });
-      showLoader();
 
       if (response.data.status) {
         Cookies.set('AuthToken', JSON.stringify(`Bearer ${response.data.token}`, { expires: 7 }));
@@ -82,6 +75,7 @@ export default function SignIn() {
       }
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   }
@@ -113,12 +107,12 @@ export default function SignIn() {
   }
 
   const handleFormSubmit = (formData) => {
+    setLoading(true);
     const payload = {
       email: formData.email,
       password: formData.password
     }
 
-    showLoader();
     putRequest("http://localhost:3000/api/auth", payload).then((response) => {
       if (response.data.status) {
         Cookies.set('AuthToken', JSON.stringify(`Bearer ${response.data.token}`, { expires: 7 }));
@@ -140,6 +134,7 @@ export default function SignIn() {
       }
       setLoading(false);
     }).catch(error => {
+      setLoading(false);
       console.log(error);
     });
   }

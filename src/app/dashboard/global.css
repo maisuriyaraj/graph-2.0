@@ -95,6 +95,7 @@ span {
 }
 
 #sideNav {
+  z-index: 9999;
   .nav-link-1 {
     transition: 0.3s ease-in;
     border-top-left-radius: 15px;
@@ -147,5 +148,40 @@ span {
     letter-spacing: 3px;
     color: #16a34a;
 
+  }
+}
+
+#main-content{
+ 
+}
+
+.show{
+  display: block;
+}
+
+
+
+@media screen and (max-width:991px) {
+  #main-content{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }  
+  
+  /* #sideNav{
+    display: none;
+  } */
+
+  .hide{
+    display: none;
+  }
+
+  #dashboard{
+    .title-card {
+      font-size: 25px;
+      letter-spacing: 1px;
+    }
+    .desc-card{
+      font-size: 14px;
+    }
   }
 }
