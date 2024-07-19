@@ -11,23 +11,25 @@ import Cookies from "js-cookie";
 import GraphSearchModal from "@/app/components/searchModal";
 
 export default function MainHeader(props) {
-  const userID = JSON?.parse(Cookies.get('userId'));
-  const BearerToken = JSON?.parse(Cookies.get('AuthToken'));
-  const [open, setOpen] = useState(false);
+  const [userID,setUserID] = useState(null);
+  const [BearerToken,setToken] = useState(null);
   const [openSearch,setOpenSearch] = useState(false);
-  const [openTheme, setOpenTheme] = useState(false);
   const navigate = useRouter();
-
-  const [Theme, setTheme] = useState('Theme');
-
-  const [searchFilter, setFilter] = useState('All');
-
   const dispatch = useDispatch();
 
 
   useEffect(() => {
-    dispatch(fetchUsers({ userID, BearerToken }));
-  }, [])
+    setUserID(JSON.parse(Cookies.get('userId')));
+    setToken(JSON.parse(Cookies.get('AuthToken')));
+    
+  }, []);
+
+  useEffect(()=>{
+
+    if(userID && BearerToken){
+      dispatch(fetchUsers({ userID, BearerToken }));
+    }
+  },[userID,BearerToken]);
 
   const { userData, loading, value } = useSelector((state) => state.user);
 

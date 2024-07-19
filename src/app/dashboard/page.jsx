@@ -1,7 +1,7 @@
 "use client";
 import { getRequest, postRequest, putRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import running from '../../../public/running.svg';
 import verification from '../../../public/verification.svg';
 import Image from 'next/image';
@@ -46,6 +46,7 @@ export default function Dashboard() {
 
 
   const { userData, loading } = useSelector((state) => state.user);
+  const willMount = useRef(true)
 
 
   /*
@@ -54,12 +55,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     Aos.init();
-  }, []);
-
-  useEffect(() => {
     setLoader(loading);
-    getUserData();
-  }, [userData]);
+    if (willMount.current){  getUserData(); }
+  }, []);
 
   function getUserData() {
     setLoader(true);
