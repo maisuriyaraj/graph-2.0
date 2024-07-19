@@ -17,18 +17,17 @@ export async function GET(request, content) {
         }
         try {
             jwt.verify(token, secreate_key);
-            console.log("Token Verified");
             let user = await userModel.findOne({ _id: content.params.userId }).select({ password: 0 });
             if (user) {
                 return NextResponse.json({ status: true, data: user, message: "Data Fetched Successfully" }, { status: 201 });
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             return NextResponse.redirect('/',302);
             // return NextResponse.json({ status: false, message: "Token is Expired !" });
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, message: "Unable to Provide Services!" });
     }
 }

@@ -19,16 +19,7 @@ export default function SignUp() {
     const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
-        // const auth = getAuth(app);
-        // const unsubscribe = auth.onAuthStateChanged((data) => {
-        //     if (data) {
-        //         console.log(data);
-        //     } else {
-        //         console.log("nothing");
-        //     }
-        // });
 
-        // return unsubscribe;
     }, []);
 
     const showLoader = () => {
@@ -60,7 +51,7 @@ export default function SignUp() {
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -69,7 +60,6 @@ export default function SignUp() {
         const provider = new GithubAuthProvider();
         try {
             const data = await signInWithPopup(auth, provider);
-            console.log(data)
             const response = await postRequest("http://localhost:3000/api/auth", {
                 email: data.user.email,
                 userName: data.user.displayName,
@@ -88,7 +78,7 @@ export default function SignUp() {
             }
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     const initialValues = {
@@ -140,7 +130,7 @@ export default function SignUp() {
                 toast.error(response.data.message);
             }
         }).catch(error => {
-            console.log(error)
+            console.error(error)
         });
     }
     return (

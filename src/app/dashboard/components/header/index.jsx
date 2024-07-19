@@ -8,22 +8,19 @@ import Link from "next/link";
 import { fetchUsers } from "@/redux/slice/users";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import GraphSearchModal from "@/app/components/searchModal";
 
 export default function MainHeader(props) {
-  const userID = JSON.parse(Cookies.get('userId'));
-  const BearerToken = JSON.parse(Cookies.get('AuthToken'));
+  const userID = JSON?.parse(Cookies.get('userId'));
+  const BearerToken = JSON?.parse(Cookies.get('AuthToken'));
   const [open, setOpen] = useState(false);
+  const [openSearch,setOpenSearch] = useState(false);
   const [openTheme, setOpenTheme] = useState(false);
   const navigate = useRouter();
 
   const [Theme, setTheme] = useState('Theme');
 
   const [searchFilter, setFilter] = useState('All');
-
-  const opFilter = (filter) => {
-    setFilter(filter);
-    setOpen(false);
-  }
 
   const dispatch = useDispatch();
 
@@ -60,10 +57,8 @@ export default function MainHeader(props) {
   }
 
   function openSideNav(){
-    console.log("OPEN")
     let nav = document.getElementById('sideNav');
     if(nav){
-      console.log(nav.style);
       if(nav.classList.contains('hide')){
         nav.classList.add('show');
         nav.classList.remove('hide');
@@ -90,14 +85,14 @@ export default function MainHeader(props) {
             <button onClick={() => openSideNav()}><i className="bi bi-list text-3xl"></i></button>
           </div>
           <div className="mx-3 flex gap-2 relative cursor-pointer">
-            <i className="bi bi-search text-2xl"></i>
+            <i className="bi bi-search text-2xl" onClick={() => setOpenSearch(true)}></i>
           </div>
           <div className="mx-3 flex gap-2 relative cursor-pointer">
             {/* <button className="bg-white rounded-lg transition-all  text-green-600 border border-solid border-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 inline-flex items-center">
               <a className="" href="#"> <i className="bi bi-plus-circle"></i> New Community </a>
             </button> */}
-            <button>
-              <Link className="" href="/dashboard/schedule"> <i className="bi bi-calendar4-range text-2xl"></i></Link>
+            <button onClick={() => goToHome("/dashboard/schedule")}>
+             <i className="bi bi-calendar4-range text-2xl" ></i>
             </button>
           </div>
           {/* <div className="mx-2 relative cursor-pointer" title="Profile">
@@ -182,7 +177,9 @@ export default function MainHeader(props) {
             </div>
           </div> */}
         </div>
+        {openSearch && <GraphSearchModal closeModal={() =>setOpenSearch(false)}  />}
       </nav>
     </div>
+    
   )
 }

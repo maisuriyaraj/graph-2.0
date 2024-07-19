@@ -22,7 +22,7 @@ export async function POST(request) {
             return NextResponse.json({ status: false, message: "Please Provide user ID !" });
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, message: "Unable to Provide Service !", error: error });
     }
 }
@@ -38,7 +38,7 @@ export async function GET(request) {
             return NextResponse.json({status:false,message:"Not Available Chats !"});
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, message: "Unable to Provide Service !", error: error });
     }
 

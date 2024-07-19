@@ -24,12 +24,11 @@ export default function Accounts() {
 
     useEffect(()=>{
         getRequest(`http://localhost:3000/api/google/v1?code=${code}&userId=${userId}`).then((response)=>{
-            console.log(response);
             if(response.status == 201){
                 route.push('/dashboard/schedule');
             }
         }).catch((error)=>{
-            console.log(error);
+            console.error(error);
         })
     },[]);
 

@@ -29,7 +29,7 @@ export async function POST(request) {
 
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, message: "Unable to provide service !" });
     }
 }

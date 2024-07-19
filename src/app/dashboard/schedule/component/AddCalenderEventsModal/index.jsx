@@ -40,7 +40,6 @@ export default function GraphAddScheduleModal(props) {
 
     useEffect(() => {
         // openAuthModal();
-        console.log(props)
     }, [props])
 
     function openAuthModal() {
@@ -71,7 +70,6 @@ export default function GraphAddScheduleModal(props) {
         }
         setLoading(true);
         postRequest(`http://localhost:3000/api/google/v1/${userId}`, payload, { 'Authorization': token }).then((response) => {
-            console.log(response);
             if (response.status) {
                 props.onRefresh();
                 closeAuthModal();
@@ -81,7 +79,7 @@ export default function GraphAddScheduleModal(props) {
         }).catch((err) => {
             setLoading(false);
             toast.error("Something went wrong !");
-            console.log(err)
+            console.error(err)
         });
     }
 

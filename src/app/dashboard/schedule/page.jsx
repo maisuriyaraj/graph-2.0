@@ -17,7 +17,6 @@ export default async function SchedulePage() {
   // const [openModal,setModal] = useState(true);
   const cradiantials = await getCalenderCradiantials();
 
-  console.log(cradiantials)
  
   const closeModal = () =>{
     return false;

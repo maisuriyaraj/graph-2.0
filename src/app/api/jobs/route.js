@@ -14,7 +14,7 @@ export async function GET(request) {
             return NextResponse.json({ status: true, message: "All Jobs Fetch Successfully !", data: jobLists });
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return NextResponse.json({ status: false, message: "Unable to provide service !" }, { status: 500 });
     }
 }

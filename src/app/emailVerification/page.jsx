@@ -8,8 +8,6 @@ export default function EmailVerification() {
     const searchParams = useSearchParams();
     const route = useRouter();
     useEffect(()=>{
-        // const { userId, token } = ;
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>",searchParams.get('userId'));
        const payload = {
         verification:'email',
         userId:searchParams.get('userId'),
@@ -21,7 +19,7 @@ export default function EmailVerification() {
           route.push('/');
         }
       }).catch((error)=>{
-        console.log(error)
+        console.error(error)
       })
     },[]);
   return (

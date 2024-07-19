@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import botImg from '../../../../../public/bot-img.png'
 import robot from '../../../../../public/robot.png'
 import man from '../../../../../public/man.png'
-import SyncLoader from "react-spinners/SyncLoader";
 import Image from 'next/image';
 import { getRequest, postRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
@@ -42,7 +41,6 @@ export default function GraphAI() {
   function getUserChatList() {
     const userId = JSON.parse(Cookies.get('userId'));
     getRequest(`http://localhost:3000/api/chatBot/v1?userId=${userId}`).then((response) => {
-      console.log(response)
       let list2 = response?.data?.data;
       let list = response?.data?.data.reverse();
       setChatsRooms(list || []);
@@ -51,7 +49,7 @@ export default function GraphAI() {
       //   setSelectedChat(list2[0]);
       // }
     }).catch((err) => {
-      console.log(err)
+      console.error(err)
     })
   }
 
@@ -59,12 +57,11 @@ export default function GraphAI() {
     const userId = JSON.parse(Cookies.get('userId'));
     const BearerToken = JSON.parse(Cookies.get('AuthToken'));
     postRequest(`http://localhost:3000/api/chatBot/v1?userId=${userId}`).then((response) => {
-      console.log(response);
 
     }).then(() => {
       getUserChatList();
     }).catch((err) => {
-      console.log(err)
+      console.error(err)
     })
   }
 
@@ -79,7 +76,6 @@ export default function GraphAI() {
       "ChatroomId": selectedChat._id
     }
     postRequest('http://localhost:3000/api/chatBot/v1/prompt', payload).then((response) => {
-      console.log(response);
       setPrompt("");
 
       if (response.status == 201) {
@@ -87,7 +83,7 @@ export default function GraphAI() {
       }
       getUserChatList();
     }).catch(err => {
-      console.log(err);
+      console.error(err);
     })
   }
 
@@ -130,7 +126,7 @@ export default function GraphAI() {
               {
                 chatsConversations.map((x, i) => (
                   <>
-                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 ${selectedChat?._id == x._id ? 'bg-gray-100' : ''}`} key={x._id} onClick={() => setSelectedChat(x)}>
+                    <button className={`flex flex-row items-center hover:bg-gray-100 rounded-xl p-4 ${selectedChat?._id == x._id ? 'bg-gray-100' : ''}`} key={i} onClick={() => setSelectedChat(x)}>
                       <div className="ml-2 text-sm font-semibold text-left w-40 overflow-hidden" style={{ textWrap: 'nowrap', textOverflow: 'ellipsis' }}>{x?.chatTitle}</div>
                     </button>
                   </>

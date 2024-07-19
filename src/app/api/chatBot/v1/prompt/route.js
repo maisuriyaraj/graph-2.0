@@ -26,7 +26,6 @@ export async function POST(request) {
             return NextResponse.json({status:false,message:"Your Prompt is too long !"});
         }
         const chatRoom = await AIBotModel.findOne({_id:chatRoomId});
-        console.log(chatRoom);
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
@@ -41,7 +40,7 @@ export async function POST(request) {
     
         return NextResponse.json({status:true,message:"Prompt Generated Successfully !",prompt:text,updateChatRoom:updatedChatRoom},{status:201});
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, message: "Unbale to Provide Service !" });
     }
 }

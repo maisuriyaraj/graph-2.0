@@ -1,16 +1,13 @@
 "use client";
 import { getRequest, postRequest, putRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import running from '../../../public/running.svg';
 import verification from '../../../public/verification.svg';
 import Image from 'next/image';
 import TimeAgo from 'react-timeago'
-import Link from 'next/link';
 import moment from 'moment';
-import GraphModal from '../components/modal';
 import GraphFieldTextModal from '../components/Fieldmodal';
-import Head from 'next/head';
 import { EmailVerificationMail } from '@/lib/mailService';
 import { ToastContainer, toast } from 'react-toastify';
 import englishStrings from 'react-timeago/lib/language-strings/en';
@@ -46,33 +43,14 @@ export default function Dashboard() {
   const [loader, setLoader] = useState(true);
 
   const formatter = buildFormatter(englishStrings);
-  var settings = {
-    autoplay: true,
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true
-  };
 
-  var settings2 = {
-    autoplay: true,
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    arrows: true
-  };
 
-  const { userData, loading, value } = useSelector((state) => state.user);
+  const { userData, loading } = useSelector((state) => state.user);
 
 
   /*
     Ref for Initial Mount: The isInitialMount ref is used to ensure that the effect runs only once during the initial mount.
   */
-  const isInitialMount = useRef(true);
 
   useEffect(() => {
     Aos.init();
@@ -102,8 +80,8 @@ export default function Dashboard() {
         }
         setLoader(false);
       }).catch((error) => {
+        toast.error(error)
         setLoader(false);
-        console.log(error);
       })
   }
 
@@ -132,14 +110,11 @@ export default function Dashboard() {
   const handleFormSubmit = (event, type) => {
 
     event.preventDefault();
-    console.log("Submitted", event?.target[0].value);
-    // setModal(false);
     if (type == 'Email') {
       const userId = JSON.parse(Cookies.get('userId'));
       const token = JSON.parse(Cookies.get('AuthToken'));
       const AuthToken = token.split(' ')[1];
 
-      console.log("Email Sent Successfully");
       let link = `http://localhost:3000/emailVerification?userId=${userId}&token=${AuthToken}`
       let mailBody = EmailVerificationMail(link);
 
@@ -147,7 +122,6 @@ export default function Dashboard() {
       putRequest('http://localhost:3000/api/auth/verification', payload, { 'Authorization': AuthToken })
         .then((res) => {
           if (res.data.status) {
-            console.log(res);
             return true;
           } else {
             setModal(false);
@@ -163,10 +137,10 @@ export default function Dashboard() {
             return postRequest('http://localhost:3000/api/mail', payload, { 'Authorization': AuthToken })
           }
         }).catch((error) => {
-          console.log(error);
+          toast.error(error);
         });
     } else {
-      console.log("SMS Sent Successfully");
+      toast.success("SMS Sent Successfully");
     }
     setModalLoader(true);
     setFieldValue(event?.target[0].value);
@@ -235,38 +209,36 @@ export default function Dashboard() {
             slidesPerView={3}
             breakpoints={{
               343: {
-                  slidesPerView: 1,
-                  centeredSlides: true,
-                  spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 20,
               },
               640: {
-                  slidesPerView: 1,
-                  centeredSlides: true,
-                  spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 20,
               },
               768: {
-                  slidesPerView: 2,
-                  centeredSlides: false,
-                  spaceBetween: 20,
+                slidesPerView: 2,
+                centeredSlides: false,
+                spaceBetween: 20,
               },
               1024: {
-                  slidesPerView: 3,
-                  centeredSlides: false,
-                  spaceBetween: 15,
+                slidesPerView: 3,
+                centeredSlides: false,
+                spaceBetween: 15,
               },
               1440: {
-                  slidesPerView: 3,
-                  centeredSlides: false,
-                  spaceBetween: 20,
+                slidesPerView: 3,
+                centeredSlides: false,
+                spaceBetween: 20,
               },
               1780: {
-                  slidesPerView: 3,
-                  centeredSlides: false,
-                  spaceBetween: 25,
+                slidesPerView: 3,
+                centeredSlides: false,
+                spaceBetween: 25,
               },
-          }}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}>
+            }}>
             {jobList.map((x, i) => (
               <SwiperSlide key={i}>
                 <div data-aos="fade-up" className="w-auto bg-white border cursor-pointer transition-all rounded-2xl hover:bg-gray-200 relative py-4 px-4 flex-shrink-0" key={x._id}>
@@ -293,50 +265,44 @@ export default function Dashboard() {
           </div>
 
           <Swiper
-            // autoplay={{
-            //   delay: 1000,
-            //   disableOnInteraction: false
-            // }}
             loop={true}
-            // modules={[Autoplay]}
             spaceBetween={10}
             breakpoints={{
               343: {
-                  slidesPerView: 1,
-                  centeredSlides: true,
-                  spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 20,
               },
               640: {
-                  slidesPerView: 1,
-                  centeredSlides: true,
-                  spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 20,
               },
               768: {
-                  slidesPerView: 2,
-                  centeredSlides: false,
-                  spaceBetween: 20,
+                slidesPerView: 2,
+                centeredSlides: false,
+                spaceBetween: 20,
               },
               1024: {
-                  slidesPerView: 4,
-                  centeredSlides: false,
-                  spaceBetween: 15,
+                slidesPerView: 4,
+                centeredSlides: false,
+                spaceBetween: 15,
               },
               1440: {
-                  slidesPerView: 4,
-                  centeredSlides: false,
-                  spaceBetween: 20,
+                slidesPerView: 4,
+                centeredSlides: false,
+                spaceBetween: 20,
               },
               1780: {
-                  slidesPerView: 4,
-                  centeredSlides: false,
-                  spaceBetween: 25,
+                slidesPerView: 4,
+                centeredSlides: false,
+                spaceBetween: 25,
               },
-          }}
+            }}
             slidesPerView={4}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}>
-            {jobPortalList.map((x) => (
-              <SwiperSlide>
+          >
+            {jobPortalList.map((x, i) => (
+              <SwiperSlide key={i}>
                 <div data-aos="fade-up" className="w-auto bg-white border cursor-pointer transition-all rounded-2xl hover:bg-gray-200 relative flex-shrink-0" key={x._id}>
                   <div className=" bg-white shadow-xl rounded-lg text-gray-900">
                     <div className="rounded-t-lg h-32 overflow-hidden">
@@ -355,40 +321,8 @@ export default function Dashboard() {
                     </div>
                     <div className="text-center mt-2">
                       <h2 className="font-semibold">{x.name}</h2>
-                      {/* <p className="text-gray-500">Freelance Web Designer</p> */}
                     </div>
-                    {/* <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
-                  <li className="flex flex-col items-center justify-around">
-                    <svg
-                      className="w-4 fill-current text-blue-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                    <div>2k</div>
-                  </li>
-                  <li className="flex flex-col items-center justify-between">
-                    <svg
-                      className="w-4 fill-current text-blue-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
-                    </svg>
-                    <div>10k</div>
-                  </li>
-                  <li className="flex flex-col items-center justify-around">
-                    <svg
-                      className="w-4 fill-current text-blue-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v6h-9V9H9v2zm3-8V2H8v1h4z" />
-                    </svg>
-                    <div>15</div>
-                  </li>
-                </ul> */}
+
                     <div className="p-4 border-t mx-8 mt-2">
                       <button className="w-1/2 block mx-auto text-sm transition-all rounded-2xl bg-green-600 hover:bg-white hover:text-green-600 border hover:border-green-600  font-semibold text-white px-3 py-4">
                         Open Portal
@@ -408,50 +342,44 @@ export default function Dashboard() {
           </div>
 
           <Swiper
-            // autoplay={{
-            //   delay: 1000,
-            //   disableOnInteraction: false
-            // }}
             loop={true}
-            // modules={[Autoplay]}
             spaceBetween={10}
             slidesPerView={4}
             breakpoints={{
               343: {
-                  slidesPerView: 1,
-                  centeredSlides: true,
-                  spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 20,
               },
               640: {
-                  slidesPerView: 1,
-                  centeredSlides: true,
-                  spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 20,
               },
               768: {
-                  slidesPerView: 2,
-                  centeredSlides: false,
-                  spaceBetween: 20,
+                slidesPerView: 2,
+                centeredSlides: false,
+                spaceBetween: 20,
               },
               1024: {
-                  slidesPerView: 4,
-                  centeredSlides: false,
-                  spaceBetween: 15,
+                slidesPerView: 4,
+                centeredSlides: false,
+                spaceBetween: 15,
               },
               1440: {
-                  slidesPerView: 4,
-                  centeredSlides: false,
-                  spaceBetween: 20,
+                slidesPerView: 4,
+                centeredSlides: false,
+                spaceBetween: 20,
               },
               1780: {
-                  slidesPerView: 4,
-                  centeredSlides: false,
-                  spaceBetween: 25,
+                slidesPerView: 4,
+                centeredSlides: false,
+                spaceBetween: 25,
               },
-          }}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}>
-            {communities.map((x) => (
-              <SwiperSlide>
+            }}
+          >
+            {communities.map((x, i) => (
+              <SwiperSlide key={i}>
                 <div data-aos="fade-up" className="w-auto bg-white border cursor-pointer transition-all rounded-2xl hover:bg-gray-200 relative flex-shrink-0" key={x._id}>
                   <div className=" bg-white shadow-xl rounded-lg text-gray-900">
                     <div className="rounded-t-lg h-32 overflow-hidden">
@@ -472,38 +400,6 @@ export default function Dashboard() {
                       <h2 className="font-semibold">{x.community_name}</h2>
                       <p className="text-gray-500">{x.total_users} Members</p>
                     </div>
-                    {/* <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
-                <li className="flex flex-col items-center justify-around">
-                  <svg
-                    className="w-4 fill-current text-blue-900"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                  </svg>
-                  <div>2k</div>
-                </li>
-                <li className="flex flex-col items-center justify-between">
-                  <svg
-                    className="w-4 fill-current text-blue-900"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
-                  </svg>
-                  <div>10k</div>
-                </li>
-                <li className="flex flex-col items-center justify-around">
-                  <svg
-                    className="w-4 fill-current text-blue-900"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v6h-9V9H9v2zm3-8V2H8v1h4z" />
-                  </svg>
-                  <div>15</div>
-                </li>
-              </ul> */}
                     <div className="p-4 border-t mx-8 mt-2">
                       <button className="w-1/2 block mx-auto text-sm transition-all rounded-2xl bg-green-600 hover:bg-white hover:text-green-600 border hover:border-green-600  font-semibold text-white px-3 py-4">
                         Join
@@ -517,9 +413,6 @@ export default function Dashboard() {
           </Swiper>
         </div>
       </div>}
-      {/* {openModal && <div>
-          <GraphModal  closeModal={closeModal} />
-      </div>} */}
       {openModal && <div>
         <GraphFieldTextModal closeModal={closeModal} fieldValue={fieldValue} loader={modalLoader} modalTitle={modalTitle} textField={textField} fieldType={fieldType} modalType={modalType} handleFormSubmit={handleFormSubmit} />
       </div>}

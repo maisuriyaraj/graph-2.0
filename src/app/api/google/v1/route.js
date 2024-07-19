@@ -19,7 +19,7 @@ export async function POST() {
             return NextResponse.json({ status: false, message: "Faild to generate URL" }, { status: 200 });
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return NextResponse.json({ status: false, message: "Unable to Provide Service !", error: error }, { status: 200 });
     }
 }
@@ -29,13 +29,11 @@ async function getVerificationToken(code){
     return new Promise((resolve,reject)=>{
         oauth2Client.getToken(code, (err, response) => {
             if (err) {
-                console.log("FAILD4555", err);
                 reject(err);
                 // return NextResponse.json({ status: false, message: "Faild To Get Token !!" });
             }
     
             oauth2Client.setCredentials(response);
-            console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",response)
             resolve(response);
             // return NextResponse.json({ status: true, message: "User Logged In successfully !", data: response });
         });
@@ -51,10 +49,8 @@ export async function GET(request) {
         const code = searchParams.get('code');
         const userId = searchParams.get('userId');
         const resp = await getVerificationToken(code);
-        console.log("oooooooooooooooooooooooooooo",resp);
         let calenderCrediatials = await calenderModel.findOne({userId:userId});
         if(calenderCrediatials){
-            console.log("UPDATED")
             await calenderModel.updateOne({userId:userId},{
                 $set:{
                     access_token:resp.access_token,
@@ -65,7 +61,6 @@ export async function GET(request) {
                 }
             });
         }else{
-            console.log("CREATED")
             let body = {
                 userId:userId,
                 calenderName:'google',
@@ -83,7 +78,7 @@ export async function GET(request) {
         
         return NextResponse.json({status:true,data:resp,message:"Access Token generated Successfully !!"},{status:201})
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return NextResponse.json({ status: false, message: "Unable to Provide Servicce !" })
     }
 }

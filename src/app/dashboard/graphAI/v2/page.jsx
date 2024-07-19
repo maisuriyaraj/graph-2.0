@@ -73,7 +73,6 @@ export default function GraphAI() {
   }
 
   const handleSelectChat = (item, index) => {
-    console.log(index);
     setSelectedIndex(index);
     setSelectedChat({
       chatTitle: item?.chatTitle,
@@ -81,56 +80,6 @@ export default function GraphAI() {
     });
     setAiConversations(item?.chats || [])
   }
-
-  // const sendMessage = () => {
-
-  //   if (userPrompt == "") {
-  //     toast.error("Please Provide Some prompt !");
-  //     return;
-  //   }
-  //   const payload = {
-  //     "prompt": userPrompt
-  //   }
-  //   let chats = selectedChat?.chats || [];
-
-  //   let obj = {
-  //     user: userPrompt,
-  //     bot: ""
-  //   }
-
-
-
-
-  //   postRequest('http://localhost:3000/api/chatBot/v2/prompt', payload).then((response) => {
-  //     console.log(response);
-  //     // obj = {
-  //     //   user: userPrompt,
-  //     //   bot: response?.data?.prompt
-  //     // }
-  //     obj['bot'] = response?.data?.prompt
-  //     chats.push(obj);
-  //     let selected = selectedChat;
-  //     selected['chats'] = chats;
-  //     selected['chatTitle'] = userPrompt;
-  //     setSelectedChat(selected);
-  //     setAiConversations(chats);
-  //     let rooms = chatsConversations || [];
-  //     rooms[selectedIndex] = selectedChat;
-  //     setChatsRooms(rooms);
-  //     let newChatRef = ref(database);
-  //     console.log(selectedChat)
-  //     get(child(newChatRef, 'chatrooms/' + userId)).then((snapshot) => {
-  //       if (snapshot.exists()) {
-  //         update(ref(database, 'chatrooms/' + userId + '/' + selectedIndex), selectedChat).then(() => {
-  //           getUserChatList();
-  //         })
-  //       }
-  //     });
-  //     setPrompt("");
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // }
 
   const sendMessage = async () => {
     if (!userPrompt) {
@@ -209,7 +158,6 @@ export default function GraphAI() {
           chats: selectedChat?.chats,
           chatTitle: userPrompt,
         };
-        console.log(updatedChat)
         await update(ref(database, `chatrooms/${userId}/${selectedIndex}`), updatedChat);
         getUserChatList();
       }

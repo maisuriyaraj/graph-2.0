@@ -14,7 +14,6 @@ function getCalenderEvents(){
         });
         calendar.events.list({calendarId,maxResults:10},(err,response)=>{
             if(err){
-                console.log("<><><><><><><><><><><><><><><<><><><>",err);
                 reject(err)
                 // return NextResponse.json({status:false,message:"Can't fetch Events !"});
             }
@@ -38,11 +37,9 @@ function addCalenderEvents(event){
             resource: event,
         },(err,response)=>{
             if(err){
-                console.log("<><><><><><><><><><><><><><><<><><><>",err);
                 reject(err)
             }
             let res = response;
-            console.log(response);
             resolve(response);
         })
     })
@@ -68,7 +65,7 @@ export async function GET(request,content) {
             return NextResponse.json({status:false,message:"User is Not Connected !",accountConnected:false});
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({status:false,message:"Unable to Provide Service !"})
     }
 }
@@ -113,22 +110,7 @@ export async function POST(request,content){
             return NextResponse.json({status:false,message:"User is Not Connected !",accountConnected:false});
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({status:false,message:"Unable to Provide Service !"})
     }
 }
-
-// export async function POST(request,content){
- 
-//     // const { searchParams } = new URL(request.url);
-//     // const userId = searchParams.get('userId');
-//     let userId = content.params.userId;
-
-
-//     try {
-        
-//     } catch (error) {
-//         console.log(error);
-//         return NextResponse.send({status:false,message:"Unable to provide service (Event List) !"});
-//     }   
-// }

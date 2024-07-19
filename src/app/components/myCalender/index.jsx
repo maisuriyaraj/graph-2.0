@@ -28,7 +28,6 @@ export default function MyCalendar(props) {
     function getCalenderEvents(){
         getRequest(`http://localhost:3000/api/google/v1/${userId}`).then((response)=>{
             if(response){
-                console.log(response)
                 const dummyEvents = response.data?.calenderData && response.data?.calenderData.map((x) => ({
                     'title': x?.summary || "N/A",
                     // 'allDay': false,

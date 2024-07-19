@@ -28,7 +28,7 @@ export async function POST(request) {
         const text = response.text();
         return NextResponse.json({status:true,message:"Prompt Generated Successfully !",prompt:text});
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, message: "Unbale to Provide Service !" });
     }
 }

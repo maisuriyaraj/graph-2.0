@@ -29,7 +29,6 @@ export default function SignIn() {
     const provider = new GoogleAuthProvider();
     try {
       const data = await signInWithPopup(auth, provider);
-      console.log(data);
       const response = await postRequest("http://localhost:3000/api/auth", {
         email: data.user.email,
         userName: data.user.displayName,
@@ -48,7 +47,7 @@ export default function SignIn() {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -58,7 +57,6 @@ export default function SignIn() {
     const provider = new GithubAuthProvider();
     try {
       const data = await signInWithPopup(auth, provider);
-      console.log(data)
       const response = await postRequest("http://localhost:3000/api/auth", {
         email: data.user.email,
         userName: data.user.displayName,
@@ -76,7 +74,7 @@ export default function SignIn() {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -123,7 +121,6 @@ export default function SignIn() {
       } else if (response.data.code == 501) {
         setAuthorized(true);
         let inputs = document.querySelectorAll('.input-controls');
-        console.log(inputs)
         if (inputs) {
           inputs.forEach((x) => {
             x.classList.add('err-Boxes');
@@ -135,7 +132,7 @@ export default function SignIn() {
       setLoading(false);
     }).catch(error => {
       setLoading(false);
-      console.log(error);
+      console.error(error);
     });
   }
 

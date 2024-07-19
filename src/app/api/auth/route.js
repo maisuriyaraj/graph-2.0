@@ -36,7 +36,6 @@ export async function POST(request) {
 
             try {
                 let user = jwt.verify(token, secreate_key);
-                console.log("TOKEN VERIFIED !!")
                 return NextResponse.json({ status: true, message: 'User Logged In Successfully', token, userId: user.userId });
             } catch (err) {
                 // Token expired or invalid
@@ -48,7 +47,6 @@ export async function POST(request) {
                 }
 
                 await AuthTableModel.updateOne({ user_id: user._id }, { $set: updateData });
-                console.log("TOKEN EXPIRED AND NEW GENERATED !!")
                 return NextResponse.json({ status: true, message: 'User Logged In Successfully', token: newToken, userId: user._id });
             }
         }
@@ -59,7 +57,6 @@ export async function POST(request) {
 
             try {
                 let auth = jwt.verify(token, secreate_key);
-                console.log("TOKEN VERIFIED !!")
                 return NextResponse.json({ status: true, message: 'User Logged In Successfully', token, userId: auths.userId });
             } catch (err) {
                 // Token expired or invalid
@@ -71,7 +68,6 @@ export async function POST(request) {
                 }
 
                 await AuthTableModel.updateOne({ user_id: user._id }, { $set: updateData });
-                console.log("TOKEN EXPIRED AND NEW GENERATED !!")
                 return NextResponse.json({ status: true, message: 'User Logged In Successfully', token: newToken, userId: user._id });
             }
         }
@@ -148,15 +144,12 @@ export async function PUT(request) {
             // User Log In
             if (payload.password) {
                 let isRight = await bcrypt.compare(payload.password, user?.password);
-                console.log(isRight)
                 if (payload.email == user.email && isRight) {
                     let tokenData = await AuthTableModel.findOne({ user_id: user._id });
                     let token = tokenData?.access_token;
 
                     try {
                         let user = jwt.verify(token, secreate_key);
-                        console.log("TOKEN VERIFIED");
-                        console.log("this is User", user);
                         return NextResponse.json({ status: true, message: 'User Logged In Successfully', token, userId: user.userId });
                     } catch (err) {
                         // Token expired or invalid
@@ -168,7 +161,6 @@ export async function PUT(request) {
                         }
 
                         await AuthTableModel.updateOne({ user_id: user._id }, { $set: updateData });
-                        console.log("TOKEN EXPIRED AND NEW GENERATED !!")
                         return NextResponse.json({ status: true, message: 'User Logged In Successfully', token: newToken, userId: user._id });
                     }
                 } else {

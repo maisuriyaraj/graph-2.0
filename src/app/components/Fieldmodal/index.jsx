@@ -18,7 +18,6 @@ export default function GraphFieldTextModal(props) {
 
   useEffect(()=>{
     // openAuthModal();
-    console.log(props)
   },[props])
 
   function openAuthModal() {

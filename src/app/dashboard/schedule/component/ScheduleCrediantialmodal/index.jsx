@@ -22,7 +22,6 @@ export default function GraphScheduleModal(props) {
 
   useEffect(() => {
     // openAuthModal();
-    console.log(props)
   }, [props])
 
   function openAuthModal() {
@@ -44,9 +43,7 @@ export default function GraphScheduleModal(props) {
   }
 
   const connectGoogle = (message) => {
-    console.log(message)
     postRequest("http://localhost:3000/api/google/v1").then((response)=>{
-      console.log(response);
       if(response.status == 201){
           // window.open(response.data.url,"_blank");
           router.push(response.data.url)
@@ -54,12 +51,11 @@ export default function GraphScheduleModal(props) {
         toast.error(response.data.message);
       }
     }).catch((error)=>{
-      console.log(error)
+      console.error(error)
     })
   }
 
   const connectOutlook = (message) => {
-    console.log(message)
   }
 
 

@@ -40,7 +40,6 @@ export default function SideNav() {
   function openCloseSideNav() {
     let nav = document.getElementById('sideNav');
     if (nav) {
-      console.log(nav.style);
       nav.classList.add('hide');
       nav.classList.remove('show');
     }
@@ -53,14 +52,12 @@ export default function SideNav() {
         <h2 className="font-normal logo text-2xl leading-6" id='logo' onClick={() => { goToHome('/dashboard') }}>
           Graph <span>Community</span>
         </h2>
-        {/* <Image src={logo2} id="logo" alt="logo" width={100} /> */}
       </div>
       <div className='flex flex-col items-center justify-center border-b mt-2 p-8 cursor-pointer relative'>
         <div className='absolute top-0 right-2 md:hidden'>
           <i className="bi bi-x-lg " onClick={() => openCloseSideNav()} ></i>
         </div>
         <div className='border image-section rounded-[50%] p-2'>
-          {/* <img src={"https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} className="rounded-[50%] object-cover" alt='avatar' width={100} /> */}
           {userData?.profile_picture && <img src={userData?.profile_picture} className="rounded-[50%] object-cover" alt='avatar' width={100} />}
           {!userData?.profile_picture && <Image src={avatar} className="rounded-[50%] object-cover" alt='avatar' width={80} />}
         </div>

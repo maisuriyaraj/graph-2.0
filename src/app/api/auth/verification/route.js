@@ -9,7 +9,6 @@ const secreate_key = process.env.SECREATE_KEY
 export async function POST(request) {
     try {
         const payload = await request.json();
-        console.log("<><><><>><><><><><><><>", payload)
         let userToken = headers();
         let token = userToken.get('Authorization') || null;
         try {
@@ -30,7 +29,7 @@ export async function POST(request) {
             return NextResponse.json({ status: false, message: "Your Session is Expired !" }, { status: 200 })
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return NextResponse.json({ status: false, messsage: "Unable to provide service" });
     }
 }
@@ -44,7 +43,6 @@ export async function PUT(request) {
             jwt.verify(token, secreate_key);
             if (payload.userId) {
                 let user = await userModel.findOne({ _id: payload.userId }).select({ email: 1, phone_number: 1, isEmailVerified: 1, isMobileVerified: 1 });
-                console.log(user)
                 if (user) {
                     if (payload["email"]) {
                         let isRegistred = await userModel.findOne({ email: payload.email })
@@ -74,7 +72,7 @@ export async function PUT(request) {
 
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: false, messsage: "Unable to provide service" });
     }
 }

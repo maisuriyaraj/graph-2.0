@@ -65,7 +65,6 @@ export default function Header() {
 
     function openNav() {
         setOpenMenu(!openMenu); // Toggle the value of openMenu
-        console.log(openMenu)
     }
 
 

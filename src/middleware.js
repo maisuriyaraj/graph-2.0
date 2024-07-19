@@ -9,14 +9,12 @@ export function middleware(request) {
     // Parse the cookie
     const parsedCookies = Object.fromEntries(cookie.split('; ').map(c => c.split('=')));
     userCookie = parsedCookies['AuthToken'] || null;
-    console.log(parsedCookies)
   }
 
   let isUser = userCookie !== null;
 
   // If user has already logged in. it will redirect user to direct Dashboard
   if(isUser && (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup' ) ){
-    console.log("isAlreadyLoggedIn")
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
