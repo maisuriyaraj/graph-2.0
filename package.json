@@ -41,6 +41,7 @@
     "react-timeago": "^7.2.0",
     "react-toastify": "^10.0.5",
     "sass": "^1.77.0",
+    "sharp": "^0.33.4",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.11",
     "swiper": "^11.1.5",
