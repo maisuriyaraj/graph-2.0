@@ -7,8 +7,6 @@ import Head from "next/head";
 import 'react-toastify/dist/ReactToastify.css';
 import { ReduxProvider } from "../components/redux-provider";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata = {
   title: `Graph Community`,
   description: "",
@@ -17,19 +15,12 @@ export const metadata = {
 
 export default async function DashBoardLayout({ children }) {
   return (
-    <html lang="en">
-      <Head>
-      </Head>
-      <body className={inter.className}>
-        <ReduxProvider>
-          <MainHeader />
-          <SideNav />
-          <div className="ml-[16rem] mt-32 relative" id="main-content">
-
-            {children}
-          </div>
-        </ReduxProvider>
-      </body>
-    </html>
+    <ReduxProvider>
+      <MainHeader />
+      <SideNav />
+      <div className="ml-[16rem] mt-32 relative" id="main-content">
+        {children}
+      </div>
+    </ReduxProvider>
   );
 }
