@@ -74,7 +74,7 @@ export default function Home() {
                   </li>
                   <li className="text-gray-700">
                     <span className="font-bold">Quality Content </span>: <p>Say goodbye to sifting through endless forums and
-                      outdated documentation. At Graph Community, you'll find curated
+                      outdated documentation. At Graph Community, you&apos;ll find curated
                       content and solutions vetted by experts in the field.</p>
                   </li>
                   <li className="text-gray-700">
@@ -84,19 +84,19 @@ export default function Home() {
                   </li>
                   <li className="text-gray-700">
                     <span className="font-bold"> Engagement and Recognition </span>: <p> Earn reputation points, badges, and
-                      recognition for your contributions to the community. Whether you're
+                      recognition for your contributions to the community. Whether you&apos;re
                       answering questions, sharing tips, or contributing valuable resources,
-                      your efforts won't go unnoticed.</p>
+                      your efforts won&apos;t go unnoticed.</p>
                   </li>
                   <li className="text-gray-700">
                     <span className="font-bold">Collaboration and Learning </span>: <p>Graph Community is more than just a
-                      Q&amp;A platform. It's a place to collaborate on projects, participate in
+                      Q&amp;A platform. It&apos;s a place to collaborate on projects, participate in
                       discussions, and learn from the experiences of others.</p>
                   </li>
                 </ul>
                 <p className="text-gray-700">
                   Join us at Graph Community and be part of a thriving community of
-                  knowledge seekers, problem solvers, and tech enthusiasts. Together, let's
+                  knowledge seekers, problem solvers, and tech enthusiasts. Together, let&apos;s
                   empower each other to learn, grow, and succeed in the ever-evolving world of
                   technology.
                 </p>
@@ -134,7 +134,7 @@ export default function Home() {
                   </li>
                   <li className="text-gray-700">
                     <span className="font-bold">Quality Content </span>: <p>Say goodbye to sifting through endless forums and
-                      outdated documentation. At Graph Community, you'll find curated
+                      outdated documentation. At Graph Community, you&apos;ll find curated
                       content and solutions vetted by experts in the field.</p>
                   </li>
                   <li className="text-gray-700">
@@ -144,19 +144,19 @@ export default function Home() {
                   </li>
                   <li className="text-gray-700">
                     <span className="font-bold"> Engagement and Recognition </span>: <p> Earn reputation points, badges, and
-                      recognition for your contributions to the community. Whether you're
+                      recognition for your contributions to the community. Whether you&apos;re
                       answering questions, sharing tips, or contributing valuable resources,
-                      your efforts won't go unnoticed.</p>
+                      your efforts won&apos;t go unnoticed.</p>
                   </li>
                   <li className="text-gray-700">
                     <span className="font-bold">Collaboration and Learning </span>: <p>Graph Community is more than just a
-                      Q&amp;A platform. It's a place to collaborate on projects, participate in
+                      Q&amp;A platform. It&apos;s a place to collaborate on projects, participate in
                       discussions, and learn from the experiences of others.</p>
                   </li>
                 </ul>
                 <p className="text-gray-700">
                   Join us at Graph Community and be part of a thriving community of
-                  knowledge seekers, problem solvers, and tech enthusiasts. Together, let's
+                  knowledge seekers, problem solvers, and tech enthusiasts. Together, let&apos;s
                   empower each other to learn, grow, and succeed in the ever-evolving world of
                   technology.
                 </p>

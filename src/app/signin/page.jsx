@@ -156,7 +156,7 @@ export default function SignIn() {
 
               </p>
               <p className="flex flex-col items-center justify-center mt-10 text-center">
-                <span>Don't have an account?</span>
+                <span>Don&apos;t have an account?</span>
                 <Link href="/signup" className="text-sm italic hover:underline">Create New</Link>
               </p>
               <p className="mt-6 text-sm text-center text-white">
