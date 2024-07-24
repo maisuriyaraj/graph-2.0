@@ -3,7 +3,7 @@ import Image from "next/image";
 import loaderGif from '../../../public/Infinity.gif';
 import logo from '../../../public/logo-2.png';
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { getRequest } from "@/lib/api.service";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";

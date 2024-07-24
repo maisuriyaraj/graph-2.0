@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { AuthTableModel, userModel } from "@/lib/models";
-import { NextApiRequest } from 'next';
 import { generateUniqueUsername } from "@/lib/helperFunctions";
 
 // const secreate_key = "akfnkdfkdjf-+-+--+-+skdfbs d sxcdvhjkdfghjkdfghjkdfghjklfghjkl852852741063!@#$%!@#$%^@#$%^@#$%^&%^&*(^&*()*()&*)";

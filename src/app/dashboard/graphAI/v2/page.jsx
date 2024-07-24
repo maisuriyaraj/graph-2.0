@@ -6,7 +6,7 @@ import robot from '../../../../../public/robot.png'
 import man from '../../../../../public/man.png'
 import { database } from '../../../../../config';
 import Image from 'next/image';
-import { getRequest, postRequest } from '@/lib/api.service';
+import { postRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
 import SyncLoader from "react-spinners/SyncLoader";
 import { HashLoaderComponent } from '@/app/components/loader';
@@ -21,21 +21,28 @@ export default function GraphAI() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [userPrompt, setPrompt] = useState("");
   const [loader, setLoader] = useState(true);
-  const userId = JSON.parse(Cookies.get('userId'));
+  const [userId,setUserID] = useState(null);
 
 
   const isInitialMount = useRef(true);
 
 
   useEffect(() => {
+    setUserID(JSON.parse(Cookies.get('userId')));
     if (isInitialMount.current) {
       isInitialMount.current = false;
-      getUserChatList();
       setTimeout(() => {
         setLoader(false);
       }, 3000);
     }
   }, []);
+
+  useEffect(()=>{
+
+    if(userId){
+      getUserChatList();
+    }
+  },[userId]);
 
   const chatboardDivRef = useRef(null);
 
@@ -58,8 +65,6 @@ export default function GraphAI() {
   }
 
   const addNewChat = () => {
-    const userId = JSON.parse(Cookies.get('userId'));
-
     let arr = chatsConversations || [];
     let obj = {
       chatTitle: "My Chat",
