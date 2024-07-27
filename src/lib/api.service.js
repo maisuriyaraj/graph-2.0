@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = "https://graphcommunity.vercel.app/"
+// const BASE_URL = "https://graphcommunity.vercel.app/"
+const BASE_URL = "http://localhost:3000/"
 
 export function getRequest(url, headers) {
     return new Promise((resolve, reject) => {
