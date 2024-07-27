@@ -7,7 +7,7 @@ export const fetchUsers = createAsyncThunk(
     "users/getAllUsers",
     async (params, thunkApi) => {
         const { userID, BearerToken } = params;
-        const response = await getRequest(`http://localhost:3000/api/user/${userID}`, { 'Authorization': BearerToken });
+        const response = await getRequest(`api/user/${userID}`, { 'Authorization': BearerToken });
         if (response.status == 201) {
             const data = await response.data.data;
             return data;

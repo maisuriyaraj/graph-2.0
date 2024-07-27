@@ -1,15 +1,21 @@
 import {  NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import NextCors from 'nextjs-cors';
 import { AuthTableModel, userModel } from "@/lib/models";
 import { generateUniqueUsername } from "@/lib/helperFunctions";
-
 // const secreate_key = "akfnkdfkdjf-+-+--+-+skdfbs d sxcdvhjkdfghjkdfghjkdfghjklfghjkl852852741063!@#$%!@#$%^@#$%^@#$%^&%^&*(^&*()*()&*)";
 const secreate_key = process.env.SECREATE_KEY
 
+
 // User Sign Up
-export async function POST(request) {
+export async function POST(request,response) {
     try {
+        await NextCors(req, res, {
+            methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+            origin: '*',
+            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+         });
         const payload = await request.json();
 
         // if (!payload.email) {
@@ -125,8 +131,13 @@ export async function POST(request) {
 
 // User Log in 
 
-export async function PUT(request) {
+export async function PUT(request,response) {
     try {
+        await NextCors(req, res, {
+            methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+            origin: '*',
+            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+         });
         const payload = await request.json();
 
         // if (!payload.email) {

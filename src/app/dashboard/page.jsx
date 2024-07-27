@@ -61,18 +61,18 @@ export default function Dashboard() {
 
   function getUserData() {
     setLoader(true);
-    getRequest(`http://localhost:3000/api/jobs`).then((response) => {
+    getRequest(`api/jobs`).then((response) => {
       if (response.data.status) {
         setjobList(response.data.data);
       }
     })
       .then(async () => {
-        let response = await getRequest(`http://localhost:3000/api/jobPortals`);
+        let response = await getRequest(`api/jobPortals`);
         if (response.data.status) {
           setJobPortals(response.data.data);
         }
       }).then(async () => {
-        let res = await getRequest("http://localhost:3000/api/community");
+        let res = await getRequest("api/community");
         if (res.data.status) {
           setCommunityList(res.data.data);
         }

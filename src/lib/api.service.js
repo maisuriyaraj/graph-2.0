@@ -1,9 +1,10 @@
 import axios from 'axios';
 
+const BASE_URL = "https://graphcommunity.vercel.app/"
 
 export function getRequest(url, headers) {
     return new Promise((resolve, reject) => {
-        axios.get(url, { headers:headers }).then((response) => {
+        axios.get(BASE_URL + url, { headers:headers }).then((response) => {
             console.log(response);
             resolve(response)
         }).catch(err => {
@@ -15,7 +16,7 @@ export function getRequest(url, headers) {
 export const  postRequest = (url,payload,headers) => {
     return new Promise((resolve,reject)=>{
          try {
-             axios.post(url,payload,{headers:headers}).then((response)=>{
+             axios.post(BASE_URL + url,payload,{headers:headers}).then((response)=>{
                  console.log(response);
                  resolve(response)
              }).catch(error => {
@@ -29,7 +30,7 @@ export const  postRequest = (url,payload,headers) => {
 
 export function putRequest(url, payload, headers) {
     return new Promise((resolve, reject) => {
-        axios.put(url, payload, { headers }).then((response) => {
+        axios.put(BASE_URL + url, payload, { headers }).then((response) => {
             console.log(response);
             resolve(response)
         }).catch(err => {
@@ -40,7 +41,7 @@ export function putRequest(url, payload, headers) {
 
 export function deleteRequest(url, headers) {
     return new Promise((resolve, reject) => {
-        axios.delete(url, payload, { headers }).then((response) => {
+        axios.delete(BASE_URL + url, payload, { headers }).then((response) => {
             console.log(response);
             resolve(response)
         }).catch(err => {

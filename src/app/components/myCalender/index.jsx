@@ -26,7 +26,7 @@ export default function MyCalendar(props) {
     }, []);
 
     function getCalenderEvents(){
-        getRequest(`http://localhost:3000/api/google/v1/${userId}`).then((response)=>{
+        getRequest(`api/google/v1/${userId}`).then((response)=>{
             if(response){
                 const dummyEvents = response.data?.calenderData && response.data?.calenderData.map((x) => ({
                     'title': x?.summary || "N/A",
