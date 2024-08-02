@@ -34,7 +34,7 @@ export default function SignUp() {
         const provider = new GoogleAuthProvider();
         try {
             const data = await signInWithPopup(auth, provider);
-            const response = await postRequest("http://localhost:3000/api/auth", {
+            const response = await postRequest("api/auth", {
                 email: data.user.email,
                 userName: data.user.displayName,
                 googleAccount: true,
@@ -60,7 +60,7 @@ export default function SignUp() {
         const provider = new GithubAuthProvider();
         try {
             const data = await signInWithPopup(auth, provider);
-            const response = await postRequest("http://localhost:3000/api/auth", {
+            const response = await postRequest("api/auth", {
                 email: data.user.email,
                 userName: data.user.displayName,
                 githubAccount: true,
@@ -119,7 +119,7 @@ export default function SignUp() {
             password: formData.password
         }
 
-        postRequest("http://localhost:3000/api/auth", payload).then((response) => {
+        postRequest("api/auth", payload).then((response) => {
             showLoader();
             if (response.data.status) {
                 Cookies.set('AuthToken',JSON.stringify(`Bearer ${response.data.token}`,{ expires: 7 }));
