@@ -41,5 +41,5 @@ export function middleware(request) {
 
 // Define the matcher to apply this middleware to specific routes
 export const config = {
-  matcher: ['/dashboard/:path*','/signin','/signup','/api/:path*','/api/user/:path*'],  // Apply middleware to /dashboard and its subroutes
+  matcher: ['/dashboard/:path*','/signin','/signup','/api/:path*'],  // Apply middleware to /dashboard and its subroutes
 };
