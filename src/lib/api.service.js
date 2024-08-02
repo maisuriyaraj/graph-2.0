@@ -5,7 +5,7 @@ const BASE_URL = "https://graphcommunity.vercel.app/"
 
 export function getRequest(url, headers) {
     return new Promise((resolve, reject) => {
-        axios.get(BASE_URL + url, { headers:headers ,timeout:10000}).then((response) => {
+        axios.get(BASE_URL + url, { headers:headers ,timeout:5000}).then((response) => {
             console.log(response);
             resolve(response)
         }).catch(err => {
@@ -17,7 +17,7 @@ export function getRequest(url, headers) {
 export const  postRequest = (url,payload,headers) => {
     return new Promise((resolve,reject)=>{
          try {
-             axios.post(BASE_URL + url,payload,{headers:headers,timeout:10000}).then((response)=>{
+             axios.post(BASE_URL + url,payload,{headers:headers,timeout:5000}).then((response)=>{
                  console.log(response);
                  resolve(response)
              }).catch(error => {
@@ -31,7 +31,7 @@ export const  postRequest = (url,payload,headers) => {
 
 export function putRequest(url, payload, headers) {
     return new Promise((resolve, reject) => {
-        axios.put(BASE_URL + url, payload, { headers ,timeout:10000}).then((response) => {
+        axios.put(BASE_URL + url, payload, { headers ,timeout:5000}).then((response) => {
             console.log(response);
             resolve(response)
         }).catch(err => {
@@ -42,7 +42,7 @@ export function putRequest(url, payload, headers) {
 
 export function deleteRequest(url, headers) {
     return new Promise((resolve, reject) => {
-        axios.delete(BASE_URL + url, payload, { headers ,timeout:10000}).then((response) => {
+        axios.delete(BASE_URL + url, payload, { headers ,timeout:5000}).then((response) => {
             console.log(response);
             resolve(response)
         }).catch(err => {
