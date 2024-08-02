@@ -43,7 +43,7 @@ export default function GraphScheduleModal(props) {
   }
 
   const connectGoogle = (message) => {
-    postRequest("http://localhost:3000/api/google/v1").then((response)=>{
+    postRequest("api/google/v1").then((response)=>{
       if(response.status == 201){
           // window.open(response.data.url,"_blank");
           router.push(response.data.url)

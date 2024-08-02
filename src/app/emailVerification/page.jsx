@@ -16,7 +16,7 @@ export default function EmailVerification() {
     }
 
     let token = searchParams.get('token')
-    postRequest("http://localhost:3000/api/auth/verification", payload, { 'Authorization': token }).then((response) => {
+    postRequest("api/auth/verification", payload, { 'Authorization': token }).then((response) => {
       if (response.data.status) {
         route.push('/');
       }

@@ -69,7 +69,7 @@ export default function GraphAddScheduleModal(props) {
             zone: timeZone
         }
         setLoading(true);
-        postRequest(`http://localhost:3000/api/google/v1/${userId}`, payload, { 'Authorization': token }).then((response) => {
+        postRequest(`api/google/v1/${userId}`, payload, { 'Authorization': token }).then((response) => {
             if (response.status) {
                 props.onRefresh();
                 closeAuthModal();

@@ -113,11 +113,11 @@ export default function Dashboard() {
       const token = JSON.parse(Cookies.get('AuthToken'));
       const AuthToken = token.split(' ')[1];
 
-      let link = `http://localhost:3000/emailVerification?userId=${userId}&token=${AuthToken}`
+      let link = `https://graphcommunity24.onrender.com/emailVerification?userId=${userId}&token=${AuthToken}`
       let mailBody = EmailVerificationMail(link);
 
       const payload = { userId: userId, email: event?.target[0].value }
-      putRequest('http://localhost:3000/api/auth/verification', payload, { 'Authorization': AuthToken })
+      putRequest('api/auth/verification', payload, { 'Authorization': AuthToken })
         .then((res) => {
           if (res.data.status) {
             return true;
@@ -132,7 +132,7 @@ export default function Dashboard() {
               email: event?.target[0].value,
               mailBody: mailBody
             }
-            return postRequest('http://localhost:3000/api/mail', payload, { 'Authorization': AuthToken })
+            return postRequest('api/mail', payload, { 'Authorization': AuthToken })
           }
         }).catch((error) => {
           toast.error(error);

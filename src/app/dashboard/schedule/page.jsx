@@ -9,7 +9,7 @@ import GraphAddScheduleModal from './component/AddCalenderEventsModal';
 async function getCalenderCradiantials(){
     const userId = JSON.parse(cookies().get("userId").value);
 
-    const response = await fetch(`http://localhost:3000/api/google/v1/${userId}`);
+    const response = await fetch(`https://graphcommunity24.onrender.com/api/google/v1/${userId}`);
     const result = response.json();
     return result;
 }

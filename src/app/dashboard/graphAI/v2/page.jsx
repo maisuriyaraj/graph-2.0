@@ -99,7 +99,7 @@ export default function GraphAI() {
 
     try {
       // Step 2: Send the prompt to the bot and get the response
-      const response = await postRequest('http://localhost:3000/api/chatBot/v2/prompt', payload);
+      const response = await postRequest('api/chatBot/v2/prompt', payload);
       const botResponse = response?.data?.prompt || "";
 
       // Step 3: Update the state with the bot's response
