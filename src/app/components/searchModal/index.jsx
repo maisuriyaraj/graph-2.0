@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { HashLoaderComponent } from '../loader';
-import Image from 'next/image';
+import './modal.css'
 import gsap from 'gsap';
 
 export default function GraphSearchModal(props) {
@@ -52,15 +51,15 @@ export default function GraphSearchModal(props) {
     <div className="w-full h-screen absolute bg-gradient-to-tr" onClick={closeAuthModal}>
       <div
         id="authOverlay"
-        className="fixed z-10 left-0 top-0 h-full w-full flex items-center justify-center py-3 px-2 overflow-y-auto bg-white/80 backdrop-blur-sm scale-y-0 -translate-x-full opacity-0 origin-center"
+        className="fixed z-10 left-0 top-0 h-full w-full flex justify-center py-3 px-2 overflow-y-auto bg-white/80 backdrop-blur-sm scale-y-0 -translate-x-full opacity-0 origin-center"
       >
         <div
           id="fourth"
-          className="bg-white/0 w-[50%] p-3 border border-white/0 rounded-2xl shadow-sm"
+          className="bg-white/0 w-[50%] h-auto overflow-hidden p-3 border border-white/0 rounded-2xl shadow-sm"
         >
           <div
             id="second"
-            className="bg-white p-4 sm:p-8 w-full rounded-xl shadow-sm scale-y-0 opacity-0"
+            className="bg-white p-4 sm:p-8 w-full h-screen rounded-xl shadow-sm scale-y-0 opacity-0"
           >
             <div id="third" className="relative scale-y-0 opacity-0" onClick={(e) => e.stopPropagation() }>
               <h1 className="text-green-600 text-4xl font-[Montserrat] mb-4">

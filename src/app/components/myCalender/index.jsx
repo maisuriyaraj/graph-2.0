@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { HashLoaderComponent } from '../loader';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import GraphAddScheduleModal from '@/app/dashboard/schedule/component/AddCalenderEventsModal';
 import { getRequest } from '@/lib/api.service';
 import Cookies from 'js-cookie';
@@ -13,18 +13,25 @@ const localizer = momentLocalizer(moment);
 export default function MyCalendar(props) {
 
     const [loader, setLoader] = useState(true);
-    const userId = JSON.parse(Cookies.get('userId'));
-    const token = JSON.parse(Cookies.get('AuthToken'));
+    const [userId,setUserID] = useState();
+    const willMount = useRef(true);
+    const [token ,setToken]= useState();
     const [calenderEvents,setCalenderEvents] = useState([]);
     const [openAddEvents, setOpenAddEvents] = useState(false);
     useEffect(() => {
+        setUserID(JSON.parse(Cookies.get('userId')));
+        setToken(JSON.parse(Cookies.get('AuthToken')));
+        
+    }, []);
+    
+    useEffect(()=>{
         setLoader(true);
+        if (willMount.current){  getCalenderEvents(); }
         setTimeout(() => {
             setLoader(false)
         }, 2000);
-        getCalenderEvents();
-    }, []);
-
+    },[userId,token])
+    
     function getCalenderEvents(){
         getRequest(`api/google/v1/${userId}`).then((response)=>{
             if(response){

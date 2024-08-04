@@ -67,7 +67,7 @@ export default function GraphScheduleModal(props) {
       >
         <div
           id="fourth"
-          className="bg-white/0 w-[40%] p-3 border border-white/0 rounded-2xl shadow-sm"
+          className="bg-white/0 md:w-[40%] p-3 border border-white/0 rounded-2xl shadow-sm"
         >
           <div
             id="second"

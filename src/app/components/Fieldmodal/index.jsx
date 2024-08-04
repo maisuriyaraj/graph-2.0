@@ -4,6 +4,7 @@ import { HashLoaderComponent } from '../loader';
 import Image from 'next/image';
 import gsap from 'gsap';
 import Check from '../../../../public/check.gif';
+import './modal.css';
 
 export default function GraphFieldTextModal(props) {
 
@@ -47,7 +48,7 @@ export default function GraphFieldTextModal(props) {
     }, 3000);
   }
   return (
-    <div className="w-full h-screen bg-gradient-to-tr">
+    <div className="w-full h-screen bg-gradient-to-tr" id=''>
       <div
         id="authOverlay"
         className="fixed z-10 left-0 top-0 h-full w-full flex items-center justify-center py-3 px-2 overflow-y-auto bg-white/80 backdrop-blur-sm scale-y-0 -translate-x-full opacity-0 origin-center"
