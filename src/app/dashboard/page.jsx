@@ -169,7 +169,7 @@ export default function Dashboard() {
         </div>
         <div className='flex gap-1'>
           <ToastContainer />
-          {/* {!userData?.isEmailVerified &&  */}
+          {!userData?.isEmailVerified && 
          <div className='w-full lg:w-1/2 activation-card flex justify-between items-center h-auto shadow border p-6'>
             <div className='text-white'>
               <h2 className='text-white title-card'>Email Verification</h2>
@@ -180,7 +180,7 @@ export default function Dashboard() {
               <Image src={running} alt='running' width={180} />
             </div>
           </div>
-          {/* } */}
+           }
           {!userData?.isMobileVerified && <div className='w-full lg:w-1/2 activation-card2 flex justify-between items-center h-auto shadow border p-6'>
             <div className='text-black'>
               <h2 className='text-green-600 title-card'>Phone Verification</h2>
