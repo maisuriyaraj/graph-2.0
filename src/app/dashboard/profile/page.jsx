@@ -19,15 +19,28 @@ export default function Profile() {
         </div>
         <div className='w-full mt-5 shadow-xl name-card'>
           <div className="bg-white rounded-b-3xl p-2">
-            <h2 className="text-center text-gray-800 text-2xl font-bold pt-6">
-              Order Summary
-            </h2>
-            <div className="w-5/6 m-auto">
-              <p className="text-center text-gray-500 pt-5">
-                You can now listen to millions of songs, audiobooks ands podcasts on
-                any device anywhere you like!
-              </p>
-            </div>
+              <div className="bg-white mt-5">
+                <nav className="tabs flex flex-col sm:flex-row">
+                  <button
+                    data-target="panel-1"
+                    className="tab active text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500"
+                  >
+                    My Profile
+                  </button>
+                  <button
+                    data-target="panel-2"
+                    className="tab ext-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none"
+                  >
+                    Posts
+                  </button>
+                  <button
+                    data-target="panel-3"
+                    className="tab text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none"
+                  >
+                    Settings
+                  </button>
+                </nav>
+              </div>
           </div>
         </div>
       </div>

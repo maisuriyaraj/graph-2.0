@@ -18,6 +18,7 @@ import * as  Aos from 'aos';
 import "aos/dist/aos.css";
 import { HashLoaderComponent } from '../components/loader';
 import { useSelector } from 'react-redux';
+import { BASE_URL } from '@/lib/api.service';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules'
 import 'swiper/css';
@@ -112,8 +113,7 @@ export default function Dashboard() {
       const userId = JSON.parse(Cookies.get('userId'));
       const token = JSON.parse(Cookies.get('AuthToken'));
       const AuthToken = token.split(' ')[1];
-
-      let link = `https://graphcommunity24.onrender.com/emailVerification?userId=${userId}&token=${AuthToken}`
+      let link = `${BASE_URL}emailVerification?userId=${userId}&token=${AuthToken}`
       let mailBody = EmailVerificationMail(link);
 
       const payload = { userId: userId, email: event?.target[0].value }
@@ -169,8 +169,8 @@ export default function Dashboard() {
         </div>
         <div className='flex gap-1'>
           <ToastContainer />
-
-          {!userData?.isEmailVerified && <div className='w-full lg:w-1/2 activation-card flex justify-between items-center h-auto shadow border p-6'>
+          {/* {!userData?.isEmailVerified &&  */}
+         <div className='w-full lg:w-1/2 activation-card flex justify-between items-center h-auto shadow border p-6'>
             <div className='text-white'>
               <h2 className='text-white title-card'>Email Verification</h2>
               <p className='desc-card'>Please Complete Your Email Verification.</p>
@@ -179,7 +179,8 @@ export default function Dashboard() {
             <div className='pt-2'>
               <Image src={running} alt='running' width={180} />
             </div>
-          </div>}
+          </div>
+          {/* } */}
           {!userData?.isMobileVerified && <div className='w-full lg:w-1/2 activation-card2 flex justify-between items-center h-auto shadow border p-6'>
             <div className='text-black'>
               <h2 className='text-green-600 title-card'>Phone Verification</h2>

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // const BASE_URL = "https://graphcommunity.vercel.app/"
-// const BASE_URL = "http://localhost:3000/"
-const BASE_URL = "https://graphcommunity24.onrender.com/"
+export const BASE_URL = "http://localhost:3000/"
+//export const BASE_URL = "https://graphcommunity24.onrender.com/"
 
 export function getRequest(url, headers) {
     return new Promise((resolve, reject) => {
@@ -31,6 +31,8 @@ export const postRequest = (url, payload, headers) => {
 }
 
 export function putRequest(url, payload, headers) {
+    console.log(BASE_URL)
+
     return new Promise((resolve, reject) => {
         axios.put(BASE_URL + url, payload, { headers: headers }).then((response) => {
             console.log(response);
