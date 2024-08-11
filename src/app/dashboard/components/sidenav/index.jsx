@@ -57,7 +57,7 @@ export default function SideNav() {
         <div className='absolute top-0 right-2 md:hidden'>
           <i className="bi bi-x-lg " onClick={() => openCloseSideNav()} ></i>
         </div>
-        <div className='border image-section rounded-[50%] p-2'>
+        <div className='border image-section rounded-[50%] p-2' onClick={() => goToHome('/dashboard/profile')}>
           {userData?.profile_picture && <img src={userData?.profile_picture} className="rounded-[50%] object-cover" alt='avatar' width={100} />}
           {!userData?.profile_picture && <Image src={avatar} className="rounded-[50%] object-cover" alt='avatar' width={80} />}
         </div>
@@ -86,7 +86,7 @@ export default function SideNav() {
           <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/communities' ? 'activePath' : ''} mt-1`}>
             <Link href="#">Communities</Link>
           </li>
-          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/graphAI' ? 'activePath' : ''} mt-1`}>
+          <li className={`p-2 nav-link-1 cursor-pointer hover:bg-gray-200 ${path == '/dashboard/graphAI/v2' ? 'activePath' : ''} mt-1`}>
             <Link href="/dashboard/graphAI/v2">GraphAI</Link>
           </li>
         </ul>

@@ -162,7 +162,7 @@ export default function Dashboard() {
 
   return (
     <main className='h-[100vh] w-full px-3' id='dashboard'>
-      {loader && <div className='w-full flex justify-center'> <HashLoaderComponent isLoading={loader} /> </div>}
+      {loader && <div className='w-full h-[70vh] flex justify-center items-center'> <HashLoaderComponent isLoading={loader} /> </div>}
       {!loader && <div>
         <div className='p-4'>
           <h2 className='text-4xl greetings'>{getGreeting()} {userData?.userName || "User"}</h2>
@@ -199,7 +199,7 @@ export default function Dashboard() {
           </div>
           <Swiper
             autoplay={{
-              delay: 1000,
+              delay: 5000,
               disableOnInteraction: false
             }}
             loop={true}

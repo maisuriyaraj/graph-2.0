@@ -3,4 +3,9 @@
     .profile-img{
         border: 10px solid #13bf11;
     }
+
+    .active-tab{
+        border-bottom:solid 2px #13bf11;
+        color: #13bf11;
+    }
 }

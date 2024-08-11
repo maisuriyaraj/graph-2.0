@@ -334,7 +334,7 @@ export default function GraphAI() {
           </div>}
         </div>
       </div>}
-      {loader && <div className='w-full h-full flex flex-row justify-center overflow-hidden items-center'> <HashLoaderComponent isLoading={loader} /> </div>}
+      {loader && <div className='w-full h-[70vh] flex flex-row justify-center overflow-hidden items-center'> <HashLoaderComponent isLoading={loader} /> </div>}
     </div>
 
     // </div>

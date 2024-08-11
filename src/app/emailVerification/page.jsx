@@ -7,7 +7,7 @@ export default function EmailVerification() {
   
   return (
     <>
-      <Suspense fallback={<div><HashLoaderComponent /></div>}>
+      <Suspense fallback={<div className="w-full h-[70vh] flex justify-center items-center"><HashLoaderComponent /></div>}>
         <PleaseWaitComponent />
       </Suspense>
     </>

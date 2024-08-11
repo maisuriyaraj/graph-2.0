@@ -1,12 +1,5 @@
 "use client";
-import Image from "next/image";
-import loaderGif from '../../../public/Infinity.gif';
-import logo from '../../../public/logo-2.png';
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect } from "react";
-import { getRequest } from "@/lib/api.service";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import { HashLoaderComponent } from "../components/loader";
 import PleaseWaitComponentAccount from "./components/PleaseWaitPage";
 /**
@@ -20,7 +13,7 @@ export default function Accounts() {
      
   return (
     <>
-    <Suspense fallback={<div><HashLoaderComponent /></div>}>
+    <Suspense fallback={<div className="w-full h-[70vh] flex justify-center items-center"><HashLoaderComponent /></div>}>
         <PleaseWaitComponentAccount />
     </Suspense>
     </>
