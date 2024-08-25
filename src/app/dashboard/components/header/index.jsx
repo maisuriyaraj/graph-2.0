@@ -7,10 +7,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { fetchUsers } from "@/redux/slice/users";
 import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
 import GraphSearchModal from "@/app/components/searchModal";
+import useCookies from "@/hooks/useCookiesHook";
 
 export default function MainHeader(props) {
+  const { cookies, getCookie, setCookie, removeCookie } = useCookies();
+
   const [userID,setUserID] = useState(null);
   const [BearerToken,setToken] = useState(null);
   const [openSearch,setOpenSearch] = useState(false);
@@ -19,8 +21,8 @@ export default function MainHeader(props) {
 
 
   useEffect(() => {
-    setUserID(JSON.parse(Cookies.get('userId')));
-    setToken(JSON.parse(Cookies.get('AuthToken')));
+    setUserID(getCookie('userId'));
+    setToken(getCookie('AuthToken'));
     
   }, []);
 
@@ -141,35 +143,6 @@ export default function MainHeader(props) {
             <i className="bi bi-bell text-2xl"></i>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-500 animate-ping"></div>
             <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-green-600"></div>
-            <div className="dropdown-menu w-[30vw] z-50 hidden bg-white right-[-7rem]  absolute border border-solid rounded-md text-gray-700 p-4" id="drop_2">
-              <h1 className="text-xl">Notification</h1>
-              <div className="flex flex-col p-8 bg-white shadow-md hover:shodow-lg rounded-2xl">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-16 h-16 rounded-2xl p-3 border border-blue-100 text-blue-400 bg-blue-50"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <div className="flex flex-col ml-3">
-                      <div className="font-medium leading-none">Delete Your Acccount ?</div>
-                      <p className="text-sm text-gray-600  mt-1">
-                        By deleting your account you will lose your all data
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
           {/* <div className="mx-2 relative cursor-pointer" title="Theme">
 

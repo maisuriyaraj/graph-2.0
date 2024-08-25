@@ -1,4 +1,4 @@
-import { AIBotModel } from "@/lib/models";
+import { AIBotModel } from "@/utils/models";
 import { NextResponse } from "next/server";
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");

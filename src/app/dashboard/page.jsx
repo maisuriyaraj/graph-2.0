@@ -1,6 +1,5 @@
 "use client";
-import { getRequest, postRequest, putRequest } from '@/lib/api.service';
-import Cookies from 'js-cookie';
+import { getRequest, postRequest, putRequest } from '@/utils/api.service';
 import { useEffect, useRef, useState } from 'react';
 import running from '../../../public/running.svg';
 import verification from '../../../public/verification.svg';
@@ -8,7 +7,7 @@ import Image from 'next/image';
 import TimeAgo from 'react-timeago'
 import moment from 'moment';
 import GraphFieldTextModal from '../components/Fieldmodal';
-import { EmailVerificationMail } from '@/lib/mailService';
+import { EmailVerificationMail } from '@/utils/mailService';
 import { ToastContainer, toast } from 'react-toastify';
 import englishStrings from 'react-timeago/lib/language-strings/en';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
@@ -18,7 +17,7 @@ import * as  Aos from 'aos';
 import "aos/dist/aos.css";
 import { HashLoaderComponent } from '../components/loader';
 import { useSelector } from 'react-redux';
-import { BASE_URL } from '@/lib/api.service';
+import { BASE_URL } from '@/utils/api.service';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules'
 import 'swiper/css';
@@ -26,11 +25,14 @@ import 'swiper/css';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import useCookies from '@/hooks/useCookiesHook';
 
 
 
 
 export default function Dashboard() {
+  const { cookies, getCookie, setCookie, removeCookie } = useCookies();
+
   const [openModal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState();
   const [modalLoader, setModalLoader] = useState(false);
@@ -47,7 +49,7 @@ export default function Dashboard() {
 
 
   const { userData, loading } = useSelector((state) => state.user);
-  const willMount = useRef(true)
+  const willMount = useRef(true);
 
 
   /*
@@ -57,7 +59,7 @@ export default function Dashboard() {
   useEffect(() => {
     Aos.init();
     setLoader(loading);
-    if (willMount.current){  getUserData(); }
+    if (willMount.current) { getUserData(); }
   }, []);
 
   function getUserData() {
@@ -110,8 +112,8 @@ export default function Dashboard() {
 
     event.preventDefault();
     if (type == 'Email') {
-      const userId = JSON.parse(Cookies.get('userId'));
-      const token = JSON.parse(Cookies.get('AuthToken'));
+      const userId = getCookie('userId');
+      const token = getCookie('AuthToken');
       const AuthToken = token.split(' ')[1];
       let link = `${BASE_URL}emailVerification?userId=${userId}&token=${AuthToken}`
       let mailBody = EmailVerificationMail(link);
@@ -162,15 +164,15 @@ export default function Dashboard() {
 
   return (
     <main className='h-[100vh] w-full px-3' id='dashboard'>
+      <ToastContainer />
       {loader && <div className='w-full h-[70vh] flex justify-center items-center'> <HashLoaderComponent isLoading={loader} /> </div>}
       {!loader && <div>
         <div className='p-4'>
           <h2 className='text-4xl greetings'>{getGreeting()} {userData?.userName || "User"}</h2>
         </div>
-        <div className='flex gap-1'>
-          <ToastContainer />
+        <div className='w-full flex verification-section'>
           {!userData?.isEmailVerified && 
-         <div className='w-full lg:w-1/2 activation-card flex justify-between items-center h-auto shadow border p-6'>
+         <div className='w-full mx-2 xl:w-1/2 my-1 activation-card flex justify-between items-center h-auto shadow border p-6'>
             <div className='text-white'>
               <h2 className='text-white title-card'>Email Verification</h2>
               <p className='desc-card'>Please Complete Your Email Verification.</p>
@@ -181,7 +183,7 @@ export default function Dashboard() {
             </div>
           </div>
            }
-          {!userData?.isMobileVerified && <div className='w-full lg:w-1/2 activation-card2 flex justify-between items-center h-auto shadow border p-6'>
+          {!userData?.isMobileVerified && <div className='w-full mx-2 my-1 xl:w-1/2 activation-card2 flex justify-between items-center h-auto shadow border p-6'>
             <div className='text-black'>
               <h2 className='text-green-600 title-card'>Phone Verification</h2>
               <p className='desc-card'>Please Complete Your Mobile Number Verification.</p>

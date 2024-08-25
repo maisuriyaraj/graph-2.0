@@ -149,6 +149,12 @@ span {
     color: #16a34a;
 
   }
+
+  @media screen and (max-width:1200px) {
+    .verification-section{
+      flex-wrap: wrap;
+    }
+  }
 }
 
 .show{

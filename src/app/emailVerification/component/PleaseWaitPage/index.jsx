@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { postRequest } from "@/lib/api.service";
+import { postRequest } from "@/utils/api.service";
 import logo from '../../../../../public/logo-2.png';
 import loaderGif from '../../../../../public/Infinity.gif';
 import Image from 'next/image';

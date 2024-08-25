@@ -9,15 +9,19 @@ import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebas
 import { app } from "../../../config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'js-cookie';
-import { postRequest, putRequest } from '@/lib/api.service';
+import { postRequest, putRequest } from '@/utils/api.service';
 import { useRouter } from 'next/navigation';
 import { Loader } from '../components/loader';
+import useCookies from '@/hooks/useCookiesHook';
+import { handleSignIn } from '@/redux/slice/users';
+import { useDispatch } from 'react-redux';
 
 export default function SignIn() {
   const route = useRouter();
+  const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const [isUnauthorized, setAuthorized] = useState(false);
+  const { cookies, getCookie, setCookie, removeCookie } = useCookies();
 
   useEffect(() => {
 
@@ -36,9 +40,8 @@ export default function SignIn() {
       });
 
       if (response.data.status) {
-        Cookies.set('AuthToken', JSON.stringify(`Bearer ${response.data.token}`, { expires: 7 }));
-        Cookies.set('userId', JSON.stringify(response.data.userId, { expires: 7 }));
-
+        setCookie('AuthToken', `Bearer ${response.data.token}`);
+        setCookie('userId', response.data.userId);
         setTimeout(() => {
           route.push('/dashboard');
         }, 3000);
@@ -64,9 +67,8 @@ export default function SignIn() {
       });
 
       if (response.data.status) {
-        Cookies.set('AuthToken', JSON.stringify(`Bearer ${response.data.token}`, { expires: 7 }));
-        Cookies.set('userId', JSON.stringify(response.data.userId, { expires: 7 }));
-
+        setCookie('AuthToken', `Bearer ${response.data.token}`);
+        setCookie('userId', response.data.userId);
         route.push('/dashboard');
       } else {
         toast.error(response.data.message);
@@ -104,36 +106,54 @@ export default function SignIn() {
     }
   }
 
-  const handleFormSubmit = (formData) => {
+  const handleFormSubmit = async (formData) => {
     setLoading(true);
     const payload = {
       email: formData.email,
       password: formData.password
     }
 
-    putRequest("api/auth", payload).then((response) => {
-      if (response.data.status) {
-        Cookies.set('AuthToken', JSON.stringify(`Bearer ${response.data.token}`, { expires: 7 }));
-        Cookies.set('userId', JSON.stringify(response.data.userId, { expires: 7 }));
-
-
-        route.push('/dashboard');
-      } else if (response.data.code == 501) {
-        setAuthorized(true);
-        let inputs = document.querySelectorAll('.input-controls');
-        if (inputs) {
-          inputs.forEach((x) => {
-            x.classList.add('err-Boxes');
-          });
-        }
-      } else {
-        toast.error(response.data.message);
+    const res = await dispatch(handleSignIn(payload));
+    if (res?.payload?.status == true) {
+      setLoading(false);
+      setCookie('AuthToken', `Bearer ${res?.payload?.token}`);
+      setCookie('userId', res?.payload?.userId);
+      route.push('/dashboard');
+    } else if (res?.payload?.code == 501) {
+      setLoading(false)
+      setAuthorized(true);
+      let inputs = document.querySelectorAll('.input-controls');
+      if (inputs) {
+        inputs.forEach((x) => {
+          x.classList.add('err-Boxes');
+        });
       }
+    } else {
       setLoading(false);
-    }).catch(error => {
-      setLoading(false);
-      console.error(error);
-    });
+      toast.error(res.payload?.message);
+    }
+
+    // putRequest("api/auth", payload).then((response) => {
+    //   if (response.data.status) {
+    //     setCookie('AuthToken', `Bearer ${response.data.token}`);
+    //     setCookie('userId', response.data.userId);
+    //     route.push('/dashboard');
+    //   } else if (response.data.code == 501) {
+    //     setAuthorized(true);
+    //     let inputs = document.querySelectorAll('.input-controls');
+    //     if (inputs) {
+    //       inputs.forEach((x) => {
+    //         x.classList.add('err-Boxes');
+    //       });
+    //     }
+    //   } else {
+    //     toast.error(response.data.message);
+    //   }
+    //   setLoading(false);
+    // }).catch(error => {
+    //   setLoading(false);
+    //   console.error(error);
+    // });
   }
 
 

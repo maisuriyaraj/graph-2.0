@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { ref } from "yup";
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -12,6 +11,7 @@ const userSchema = new mongoose.Schema({
     googleAccount: { type: Boolean, default: false },
     githubAccount: { type: Boolean, default: false },
     phone_number: { type: String, default: null },
+    designation:{type:String,default:null},
     profile_picture: { type: String, default: null },
     background_cover: { type: String, default: null },
     company_name: { type: String, default: null },

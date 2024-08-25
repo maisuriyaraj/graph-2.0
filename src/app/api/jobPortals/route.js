@@ -1,4 +1,4 @@
-import { jobPortals } from "@/lib/models";
+import { jobPortals } from "@/utils/models";
 import { NextResponse } from "next/server";
 
 

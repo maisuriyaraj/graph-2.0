@@ -1,4 +1,4 @@
-import { communityModel } from "@/lib/models";
+import { communityModel } from "@/utils/models";
 import { NextResponse } from "next/server";
 
 

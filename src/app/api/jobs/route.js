@@ -1,4 +1,4 @@
-import { jobListingModel } from "@/lib/models";
+import { jobListingModel } from "@/utils/models";
 import { NextResponse } from "next/server";
 
 

@@ -6,11 +6,13 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { HashLoaderComponent } from '../loader';
 import { useEffect, useRef, useState } from 'react';
 import GraphAddScheduleModal from '@/app/dashboard/schedule/component/AddCalenderEventsModal';
-import { getRequest } from '@/lib/api.service';
-import Cookies from 'js-cookie';
+import { getRequest } from '@/utils/api.service';
+import useCookies from '@/hooks/useCookiesHook';
 const localizer = momentLocalizer(moment);
 
 export default function MyCalendar(props) {
+
+    const { cookies, getCookie, setCookie, removeCookie } = useCookies();
 
     const [loader, setLoader] = useState(true);
     const [userId,setUserID] = useState();
@@ -19,8 +21,8 @@ export default function MyCalendar(props) {
     const [calenderEvents,setCalenderEvents] = useState([]);
     const [openAddEvents, setOpenAddEvents] = useState(false);
     useEffect(() => {
-        setUserID(JSON.parse(Cookies.get('userId')));
-        setToken(JSON.parse(Cookies.get('AuthToken')));
+        setUserID(getCookie('userId'));
+        setToken(getCookie('AuthToken'));
         
     }, []);
     

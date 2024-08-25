@@ -4,83 +4,29 @@ import { useEffect, useState } from "react";
 import { object, ref, string } from 'yup';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { getAuth } from "firebase/auth";
-import { signInWithPopup, GoogleAuthProvider,GithubAuthProvider } from "firebase/auth";
-import {app} from "../../../config";
-import { postRequest } from "@/lib/api.service";
+import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
+import { app } from "../../../config";
+import { postRequest } from "@/utils/api.service";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation";
-import Cookies from 'js-cookie';
-import {Loader} from "../components/loader";
+import { Loader } from "../components/loader";
+import useCookies from "@/hooks/useCookiesHook";
+import { useDispatch, useSelector } from "react-redux";
+import { handleSignUp } from "@/redux/slice/users";
 
 export default function SignUp() {
 
     const route = useRouter();
+    const dispatch = useDispatch();
+    // const { loading, error, success } = useSelector((state) => state.auth);
+
+
     const [isLoading, setLoading] = useState(false);
+    const { cookies, getCookie, setCookie, removeCookie } = useCookies();
+    const { loading, error, success } = useSelector((state) => state.auth);
 
-    useEffect(() => {
 
-    }, []);
-
-    const showLoader = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-    }
-
-    const signInWithGoogle = async () => {
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        try {
-            const data = await signInWithPopup(auth, provider);
-            const response = await postRequest("api/auth", {
-                email: data.user.email,
-                userName: data.user.displayName,
-                googleAccount: true,
-                profile_picture:data.user.photoURL
-            });
-            showLoader();
-
-            if (response.data.status) {
-                Cookies.set('AuthToken',JSON.stringify(`Bearer ${response.data.token}`,{ expires: 7 }));
-                Cookies.set('userId', JSON.stringify(response.data.userId, { expires: 7 }));
-                route.push('/dashboard');
-            } else {
-                toast.error(response.data.message);
-            }
-            setLoading(false);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    const signInWithGitHub = async () => {
-        const auth = getAuth(app);
-        const provider = new GithubAuthProvider();
-        try {
-            const data = await signInWithPopup(auth, provider);
-            const response = await postRequest("api/auth", {
-                email: data.user.email,
-                userName: data.user.displayName,
-                githubAccount: true,
-                profile_picture:data.user.photoURL
-            });
-            showLoader();
-
-            if (response.data.status) {
-                Cookies.set('AuthToken',JSON.stringify(`Bearer ${response.data.token}`,{ expires: 7 }));
-                Cookies.set('userId', JSON.stringify(response.data.userId, { expires: 7 }));
-
-                route.push('/dashboard');
-            } else {
-                toast.error(response.data.message);
-            }
-            setLoading(false);
-        } catch (error) {
-            console.error(error);
-        }
-    }
     const initialValues = {
         email: "",
         password: "",
@@ -94,6 +40,17 @@ export default function SignUp() {
             .oneOf([ref('password'), null], 'Passwords must match')
             .required('Confirm Password is required'),
     })
+
+    useEffect(() => {
+
+    }, []);
+
+    const showLoader = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+    }
 
     const showPasswordToggle = () => {
         let input1 = document.getElementById('password');
@@ -113,25 +70,86 @@ export default function SignUp() {
         }
     }
 
-    const handleFormSubmit = (formData) => {
-        const payload = {
-            email: formData.email,
-            password: formData.password
-        }
-
-        postRequest("api/auth", payload).then((response) => {
+    const signInWithGoogle = async () => {
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        try {
+            const data = await signInWithPopup(auth, provider);
+            const response = await postRequest("api/auth", {
+                email: data.user.email,
+                userName: data.user.displayName,
+                googleAccount: true,
+                profile_picture: data.user.photoURL
+            });
             showLoader();
+
             if (response.data.status) {
-                Cookies.set('AuthToken',JSON.stringify(`Bearer ${response.data.token}`,{ expires: 7 }));
-                Cookies.set('userId', JSON.stringify(response.data.userId, { expires: 7 }));
+                setCookie('AuthToken', `Bearer ${response?.data?.token}`);
+                setCookie('userId', response?.data?.userId);
+                route.push('/dashboard');
+            } else {
+                toast.error(response?.data?.message);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const signInWithGitHub = async () => {
+        const auth = getAuth(app);
+        const provider = new GithubAuthProvider();
+        try {
+            const data = await signInWithPopup(auth, provider);
+            const response = await postRequest("api/auth", {
+                email: data.user.email,
+                userName: data.user.displayName,
+                githubAccount: true,
+                profile_picture: data.user.photoURL
+            });
+            showLoader();
+
+            if (response.data.status) {
+                setCookie('AuthToken', `Bearer ${response.data.token}`);
+                setCookie('userId', response.data.userId);
 
                 route.push('/dashboard');
             } else {
                 toast.error(response.data.message);
             }
-        }).catch(error => {
-            console.error(error)
-        });
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleFormSubmit = async (formData) => {
+        const payload = {
+            email: formData.email,
+            password: formData.password
+        }
+
+        // postRequest("api/auth", payload).then((response) => {
+        //     showLoader();
+        //     if (response?.data?.status) {
+        //         setCookie('AuthToken',`Bearer ${response?.data?.token}`);
+        //         setCookie('userId', response?.data?.userId);
+        //         route.push('/dashboard');
+        //     } else {
+        //         toast.error(response?.data?.message);
+        //     }
+        // }).catch(error => {
+        //     console.error(error)
+        // });
+
+        const res = await dispatch(handleSignUp(payload));
+        if (res?.payload?.status == true) {
+            setCookie('AuthToken', `Bearer ${res?.payload?.token}`);
+            setCookie('userId', res?.payload?.userId);
+            route.push('/dashboard');
+        } else {
+            toast.error(res?.payload?.message);
+        }
     }
     return (
         <main className='w-full' id='signIn'>
@@ -247,7 +265,6 @@ export default function SignUp() {
                                 </div>
                             </Form>
                         </Formik>
-
                     </div>
                 </div>
             </div>

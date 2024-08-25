@@ -1,4 +1,4 @@
-import { calenderModel } from "@/lib/models";
+import { calenderModel } from "@/utils/models";
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
 

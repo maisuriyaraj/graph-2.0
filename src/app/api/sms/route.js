@@ -1,5 +1,5 @@
-import { sendEmailService, sendSMSService } from "@/lib/helperFunctions";
-import { userModel } from "@/lib/models";
+import { sendEmailService, sendSMSService } from "@/utils/helperFunctions";
+import { userModel } from "@/utils/models";
 import jwt from 'jsonwebtoken';
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";

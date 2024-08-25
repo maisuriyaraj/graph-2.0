@@ -1,8 +1,8 @@
 import {  NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { AuthTableModel, userModel } from "@/lib/models";
-import { generateUniqueUsername } from "@/lib/helperFunctions";
+import { AuthTableModel, userModel } from "@/utils/models";
+import { generateUniqueUsername } from "@/utils/helperFunctions";
 const secreate_key = process.env.SECREATE_KEY
 
 

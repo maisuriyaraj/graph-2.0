@@ -1,4 +1,4 @@
-import { AIBotModel, userModel } from "@/lib/models";
+import { AIBotModel, userModel } from "@/utils/models";
 import { NextResponse } from "next/server";
 
 

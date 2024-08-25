@@ -1,4 +1,4 @@
-import { AuthTableModel, userModel } from "@/lib/models";
+import { AuthTableModel, userModel } from "@/utils/models";
 import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import { headers } from "next/headers";

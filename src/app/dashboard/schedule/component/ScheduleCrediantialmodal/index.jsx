@@ -1,5 +1,5 @@
 "use client";
-import { postRequest } from '@/lib/api.service';
+import { postRequest } from '@/utils/api.service';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';

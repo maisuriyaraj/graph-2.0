@@ -6,14 +6,16 @@ import robot from '../../../../../public/robot.png'
 import man from '../../../../../public/man.png'
 import { database } from '../../../../../config';
 import Image from 'next/image';
-import { postRequest } from '@/lib/api.service';
-import Cookies from 'js-cookie';
+import { postRequest } from '@/utils/api.service';
 import SyncLoader from "react-spinners/SyncLoader";
 import { HashLoaderComponent } from '@/app/components/loader';
 import { toast, ToastContainer } from 'react-toastify';
+import useCookies from '@/hooks/useCookiesHook';
 
 export default function GraphAI() {
 
+
+  const { cookies, getCookie, setCookie, removeCookie } = useCookies();
 
   const [chatsConversations, setChatsRooms] = useState([]);
   const [aiConversations, setAiConversations] = useState([]);
@@ -28,7 +30,7 @@ export default function GraphAI() {
 
 
   useEffect(() => {
-    setUserID(JSON.parse(Cookies.get('userId')));
+    setUserID(getCookie('userId'));
     if (isInitialMount.current) {
       isInitialMount.current = false;
       setTimeout(() => {
@@ -75,9 +77,12 @@ export default function GraphAI() {
     let newChatRef = ref(database, 'chatrooms/' + userId);
     set(newChatRef, arr);
     getUserChatList();
+    let index = chatsConversations.length - 1;
+    handleSelectChat(obj,index);
   }
 
   const handleSelectChat = (item, index) => {
+    console.log(index)
     setSelectedIndex(index);
     setSelectedChat({
       chatTitle: item?.chatTitle,
@@ -183,20 +188,7 @@ export default function GraphAI() {
         <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
           <div className="flex flex-row items-center justify-center h-12 w-full">
             <div className="flex items-center justify-center rounded-2xl text-green-700 bg-green-100 h-10 w-10">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                />
-              </svg>
+              <i className="bi bi-robot text-2xl"></i>
             </div>
             <div className="ml-2 font-bold text-2xl">GraphAI</div>
           </div>
@@ -225,7 +217,7 @@ export default function GraphAI() {
 
         <div className="flex flex-col flex-auto h-[85vh] overflow-auto p-6">
           {selectedChat != null && <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4" id='chatboard' >
-            <div ref={chatboardDivRef} className="flex flex-col h-full overflow-x-auto mb-4 scroll-smooth">
+            <div ref={chatboardDivRef} className="flex flex-col h-full overflow-x-auto mb-4 scroll-smooth" >
               {aiConversations.map((chat, i) => (
                 <>
                   <div className="flex flex-col h-full" id='chatBoard' key={i}>

@@ -5,17 +5,19 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import gsap from 'gsap';
-import { timeZoneList } from '@/lib/timezone';
+import { timeZoneList } from '@/utils/timezone';
 import Select from 'react-select';
 // import Autocomplete from "react-google-autocomplete";
-import { postRequest } from '@/lib/api.service';
-import Cookies from 'js-cookie';
+import { postRequest } from '@/utils/api.service';
 import { toast, ToastContainer } from 'react-toastify';
 import { TimerLoader } from '@/app/components/loader';
 import moment from 'moment';
+import useCookies from '@/hooks/useCookiesHook';
 
 
 export default function GraphAddScheduleModal(props) {
+
+    const { cookies, getCookie, setCookie, removeCookie } = useCookies();
 
     const [authAnimation, setAnimation] = useState();
     const [eventTitle, setTitle] = useState("");
@@ -24,8 +26,8 @@ export default function GraphAddScheduleModal(props) {
     const [endDate, setEndDate] = useState();
     const [timeZone, setTimeZone] = useState();
     const [loading, setLoading] = useState(false);
-    const userId = JSON.parse(Cookies.get('userId'));
-    const token = JSON.parse(Cookies.get('AuthToken'));
+    const [userId,setuserID] = useState();
+    const [token,setToken] = useState();
 
 
 
@@ -35,6 +37,8 @@ export default function GraphAddScheduleModal(props) {
     }))
 
     useEffect(() => {
+        setuserID(getCookie('userId'));
+        setToken(getCookie('AuthToken'));
         openAuthModal();
     }, []);
 
